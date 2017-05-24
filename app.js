@@ -100,7 +100,7 @@ client.on('message', message => {
     message.author.send(help);
   }
   if (message.content.startsWith('.sounds')) {
-    message.author.send({ embed: { color: config.palette[0], description: 'A very simple Embed!' } });
+    message.author.send({ embed: { color: config.palette.blue, description: `To see the full list of sounds, visit: ${config.soundlist}` } });
   }
 });
 
