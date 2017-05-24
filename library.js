@@ -1,3 +1,3 @@
-const sounds = require('../sounds');
+const sounds = require('./sounds.json');
 
 module.exports = sounds;
