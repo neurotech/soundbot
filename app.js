@@ -100,7 +100,12 @@ client.on('message', message => {
     message.author.send(help);
   }
   if (message.content.startsWith('.sounds')) {
-    message.author.send({ embed: { color: config.palette.blue, description: `To see the full list of sounds, visit: ${config.soundlist}` } });
+    const embed = new Discord.RichEmbed()
+      .setColor(config.palette.blue)
+      .setThumbnail('https://raw.githubusercontent.com/neurotech/soundbot/master/images/megaman_walk.gif')
+      .addField('Soundbot Sound Library', `[Click here to see the full list of sounds.](${config.soundlist})`, true);
+
+    message.author.send({embed});
   }
 });
 
