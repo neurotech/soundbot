@@ -6,7 +6,7 @@
   "author": "Tim Douglas",
   "license": "MIT",
   "scripts": {
-    "start": "forever start app.js --minUptime 5000 --spinSleepTime 5000"
+    "start": "forever --minUptime 5000 --spinSleepTime 5000 start app.js"
   },
   "dependencies": {
     "discord.js": "11.1.0",
