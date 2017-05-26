@@ -6,8 +6,8 @@ let config = {
   admins: process.env.DISCORD_SOUNDBOT_ADMINS,
   soundlist: process.env.DISCORD_SOUNDBOT_SOUNDLISTURL,
   paths: {
-    sounds: './sounds',
-    speech: './speech'
+    sounds: 'sounds',
+    speech: 'speech'
   },
   palette: {
     blue: 0x5077F3,
