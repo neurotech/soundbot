@@ -6,7 +6,7 @@
   "author": "Tim Douglas",
   "license": "MIT",
   "scripts": {
-    "start": "forever --minUptime 5000 --spinSleepTime 5000 start app.js"
+    "start": "pm2 start app.js --name='soundbot'"
   },
   "dependencies": {
     "dateformat": "^2.0.0",
@@ -17,6 +17,6 @@
     "sentence-generator": "^1.0.1"
   },
   "devDependencies": {
-    "forever": "0.15.3"
+    "pm2": "^2.4.6"
   }
 }
