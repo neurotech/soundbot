@@ -2,7 +2,6 @@ const channel = require('./channel');
 const help = require('./help');
 const sentence = require('./sentence');
 const sounds = require('./sounds');
-const speech = require('./speech');
 
 const router = (message) => {
   // Join/leave the user's voice channel
@@ -12,13 +11,6 @@ const router = (message) => {
   // Generate semi-sensical sentences
   if (message.content.startsWith('.sentence')) sentence.sentence(message);
   if (message.content.startsWith('.ttssentence')) sentence.tts(message);
-  if (message.content.startsWith('.speaksentence')) sentence.speak(message);
-
-  // Clean out speech directory
-  if (message.content.startsWith('.clean')) speech.clean(message);
-
-  // Say something
-  if (message.content.startsWith('.say')) speech.say(message);
 
   // Play a sound
   if (message.content.startsWith('.play')) sounds.play(message);

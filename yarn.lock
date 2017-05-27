@@ -1638,10 +1638,6 @@ safe-buffer@^5.0.1, safe-buffer@~5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.0.1.tgz#d263ca54696cd8a306b5ca6551e92de57918fbe7"
 
-say@0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/say/-/say-0.11.0.tgz#d4ec524f96a066043956ce62e78a5792a42e47d9"
-
 semistandard@9.2.1:
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/semistandard/-/semistandard-9.2.1.tgz#65d0e99deb63225250b8a993cec8174b54593a9d"

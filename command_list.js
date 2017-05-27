@@ -34,18 +34,8 @@ List all the sounds in my library.
 
 let speech = `
 \`\`\`
-.say <phrase>
-Speak the <phrase> in the voice channel that you're in.
-\`\`\`
-
-\`\`\`
 .sentence
 Generate a sentence and send it to the text channel that you made the command from.
-\`\`\`
-
-\`\`\`
-.speaksentence
-Generate a sentence and speak it into the voice channel that you're in.
 \`\`\`
 
 \`\`\`
