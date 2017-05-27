@@ -9,7 +9,9 @@
     "start": "forever --minUptime 5000 --spinSleepTime 5000 start app.js"
   },
   "dependencies": {
+    "dateformat": "^2.0.0",
     "discord.js": "11.1.0",
+    "log-symbols": "^1.0.2",
     "node-opus": "^0.2.6",
     "semistandard": "9.2.1",
     "sentence-generator": "^1.0.1"
