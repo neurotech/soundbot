@@ -5,18 +5,26 @@
   "main": "app.js",
   "author": "Tim Douglas",
   "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neurotech/soundbot.git"
+  },
   "scripts": {
-    "start": "pm2 start app.js --name='soundbot'"
+    "dev": "http-server build",
+    "watch": "watch --interval 1 \"node build.js\" src/",
+    "start": "node app.js",
+    "deploy":
+      "now --public --local-config now.json && now alias --local-config now.json",
+    "clean": "now --local-config now.json rm soundbot --safe --yes"
   },
   "dependencies": {
-    "dateformat": "^2.0.0",
-    "discord.js": "11.1.0",
-    "log-symbols": "^1.0.2",
-    "node-opus": "^0.2.6",
-    "semistandard": "9.2.1",
-    "sentence-generator": "^1.0.1"
-  },
-  "devDependencies": {
-    "pm2": "^2.4.6"
+    "discord.js": "11.3.2",
+    "ffmpeg-binaries": "3.2.2-3",
+    "log-symbols": "2.2.0",
+    "node-opus": "0.3.0",
+    "sea-lion": "2.0.2",
+    "sentence-generator": "1.0.1",
+    "spacetime": "4.1.1"
   }
 }
