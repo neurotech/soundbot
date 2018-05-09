@@ -44,8 +44,14 @@ let sounds = {
     }
     message.delete(200);
   },
-  random: (message) => {
-    const voiceChannel = message.member.voiceChannel;
+  random: (message, id) => {
+    let voiceChannel = null;
+    if (message === null) {
+      voiceChannel = client.channels.get(id);
+    } else {
+      voiceChannel = message.member.voiceChannel;
+    }
+
     if (!voiceChannel) {
       return message.author.send({
         embed: {
@@ -62,13 +68,16 @@ let sounds = {
       });
     }
 
-    voiceChannel.join()
+    voiceChannel
+      .join()
       .then(connection => {
         let selection = library.sort(() => Math.random() * 2 - 1);
         let random = selection.slice(0, 1);
         connection.playFile(`./${config.paths.sounds}/${random[0].file}`);
-      });
-    message.delete(200);
+      })
+      .catch(console.error);
+
+    if (message) message.delete(200);
   }
 };
 
