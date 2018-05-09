@@ -1,23 +1,22 @@
 let config = {
   discord: {
     token: process.env.DISCORD_SOUNDBOT_TOKEN,
-    voice: 'Alex'
+    voice: "Alex"
   },
   admins: process.env.DISCORD_SOUNDBOT_ADMINS,
   soundlist: process.env.DISCORD_SOUNDBOT_SOUNDLISTURL,
   paths: {
-    sounds: 'sounds',
-    speech: 'speech'
+    sounds: "sounds"
   },
   palette: {
-    blue: 0x5077F3,
-    red: 0xFF4949,
-    green: 0x12CE66,
-    yellow: 0xF7BA2A,
-    orange: 0xEE7F20,
-    purple: 0xBE87EC,
-    pink: 0xEE7ECD,
-    teal: 0x63E7C8
+    blue: 0x5077f3,
+    red: 0xff4949,
+    green: 0x12ce66,
+    yellow: 0xf7ba2a,
+    orange: 0xee7f20,
+    purple: 0xbe87ec,
+    pink: 0xee7ecd,
+    teal: 0x63e7c8
   }
 };
 
