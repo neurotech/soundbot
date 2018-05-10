@@ -1,7 +1,11 @@
 let config = {
   discord: {
     token: process.env.DISCORD_SOUNDBOT_TOKEN,
-    voice: "Alex"
+    guildId: process.env.DISCORD_SOUNDBOT_GUILD_ID,
+    blacklist: {
+      text: process.env.DISCORD_SOUNDBOT_TEXT_CHANNELS_BLACKLIST.split(","),
+      voice: process.env.DISCORD_SOUNDBOT_VOICE_CHANNELS_BLACKLIST.split(",")
+    }
   },
   admins: process.env.DISCORD_SOUNDBOT_ADMINS,
   soundlist: process.env.DISCORD_SOUNDBOT_SOUNDLISTURL,
