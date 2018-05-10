@@ -44,7 +44,7 @@ let sounds = {
     }
     message.delete(200);
   },
-  random: (message, id) => {
+  random: (message, id, callback) => {
     let voiceChannel = null;
     if (message === null) {
       voiceChannel = client.channels.get(id);
@@ -74,6 +74,7 @@ let sounds = {
         let selection = library.sort(() => Math.random() * 2 - 1);
         let random = selection.slice(0, 1);
         connection.playFile(`./${config.paths.sounds}/${random[0].file}`);
+        callback(null, random[0]);
       })
       .catch(console.error);
 
