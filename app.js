@@ -43,7 +43,7 @@ process.on("exit", () => {
 process.on("uncaughtException", err => {
   client.destroy();
   log("error", `Uncaught exception!`);
-  log("error", err);
+  log("error", err.stack);
   process.exit(1);
 });
 process.on("unhandledRejection", (reason, p) => {
