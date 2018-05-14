@@ -35,7 +35,8 @@ log("success", "Compiled Sass to CSS.");
 
 // Uglify JS
 let js = fs.readFileSync("./src/index.js", "utf8");
-fs.writeFileSync("./build/index.js", uglify.minify(js).code, "utf8");
+fs.writeFileSync("./build/index.js", js, "utf8");
+// fs.writeFileSync("./build/index.js", uglify.minify(js).code, "utf8");
 log("success", "Uglified JS.");
 
 // Vendor CSS, JS
