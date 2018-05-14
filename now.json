@@ -3,12 +3,11 @@
   "type": "npm",
   "alias": "soundbot.now.sh",
   "env": {
-    "DISCORD_SOUNDBOT_TOKEN": "@discord-soundbot-token",
-    "DISCORD_SOUNDBOT_GUILD_ID": "@discord-soundbot-guild-id",
-    "DISCORD_SOUNDBOT_TEXT_CHANNELS_BLACKLIST":
-      "@discord-soundbot-text-channels-blacklist",
-    "DISCORD_SOUNDBOT_VOICE_CHANNELS_BLACKLIST":
-      "@discord-soundbot-voice-channels-blacklist"
+    "SOUNDBOT_TOKEN": "@soundbot-token",
+    "SOUNDBOT_GUILD_ID": "@soundbot-guild-id",
+    "SOUNDBOT_TEXT_BLACKLIST": "@soundbot-text-blacklist",
+    "SOUNDBOT_VOICE_BLACKLIST": "@soundbot-voice-blacklist",
+    "SOUNDBOT_ROLLBAR_SERVER_TOKEN": "@soundbot-rollbar-server-token"
   },
   "scale": {
     "sfo1": {
@@ -17,9 +16,15 @@
     }
   },
   "files": [
+    "build",
+    "commands",
+    "db",
+    "discord",
+    "sounds",
+    "tasks",
+    "web",
     "app.js",
     "command_list.js",
-    "commands",
     "config.js",
     "discord-client.js",
     "library.js",
@@ -27,10 +32,10 @@
     "now.json",
     "package-lock.json",
     "package.json",
+    "rollbar-client.js",
     "sentences.txt",
-    "sounds",
+    "setup.js",
     "sounds.json",
-    "utils.js",
-    "web.js"
+    "utils.js"
   ]
 }
