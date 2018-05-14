@@ -1,6 +1,8 @@
-const client = require("../discord-client");
+const client = require("../discord/discord-client");
 const config = require("../config");
+const db = require("../db");
 const library = require("../library");
+const rollbar = require("../rollbar-client");
 
 let sounds = {
   play: message => {
@@ -68,17 +70,33 @@ let sounds = {
       });
     }
 
+    let selection = library.sort(() => Math.random() * 2 - 1);
+    let random = selection.slice(0, 1);
+    let file = `./${config.paths.sounds}/${random[0].file}`;
+    let lastSoundPlayed = random[0];
+
     voiceChannel
       .join()
       .then(connection => {
-        let selection = library.sort(() => Math.random() * 2 - 1);
-        let random = selection.slice(0, 1);
-        connection.playFile(`./${config.paths.sounds}/${random[0].file}`);
-        callback(null, random[0]);
-      })
-      .catch(console.error);
+        var stream = connection.playFile(file);
 
-    if (message) message.delete(200);
+        stream.on("start", () => {
+          connection.player.streamingData.pausedTime = 0;
+        });
+        stream.on("debug", debug => {
+          rollbar.debug(debug);
+        });
+        stream.on("error", error => {
+          rollbar.error(error);
+        });
+        stream.on("end", end => {
+          setTimeout(() => {
+            if (message) message.delete(200);
+            if (message === null) return callback(null, lastSoundPlayed);
+          }, 1000);
+        });
+      })
+      .catch(rollbar.error);
   }
 };
 
