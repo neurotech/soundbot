@@ -1,7 +1,25 @@
+Vue.config.devtools = true;
+
 var demo = new Vue({
   el: "#app",
-  data: {},
-  computed: {},
+  data: {
+    state: {
+      isRandomSoundSelected: false,
+      noSoundSelected: true,
+      selectedSound: {},
+      libraryFilter: ""
+    },
+  computed: {
+    filteredLibrary() {
+      if (this.state.libraryFilter === "") return this.library;
+
+      return this.library.filter(
+        sound =>
+          sound.id.indexOf(this.state.libraryFilter) > 1 ||
+          sound.description.indexOf(this.state.libraryFilter) > 1
+      );
+    }
+  },
   watch: {
     // "path.to.thing": function (val, oldVal) {
     //   countItUp("ELEMENT", oldVal, val);
@@ -12,6 +30,11 @@ var demo = new Vue({
   },
 
   methods: {
+    resetState: function() {
+      this.state.isRandomSoundSelected = false;
+      this.state.noSoundSelected = true;
+      this.state.selectedSound = {};
+    }
     // fetchData: function() {
     //   var request = new XMLHttpRequest();
     //   var self = this;

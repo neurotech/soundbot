@@ -28,8 +28,8 @@ html(lang='en-AU')
                   h3.card-title Voice
                   .card-options
                     label.custom-switch.m-0
-                      .mr-3 Random Sound
-                      input(type="checkbox" value="1" class="custom-switch-input" checked)
+                      span.mr-3.tag.tag-rounded("v-bind:class"="{ 'tag-blue' : state.isRandomSoundSelected, 'badge-light' : !state.isRandomSoundSelected }") Random Sound
+                      input(type="checkbox" class="custom-switch-input" v-model="state.isRandomSoundSelected")
                       span(class="custom-switch-indicator")
                 .card-body
                   .form-group
@@ -40,10 +40,23 @@ html(lang='en-AU')
                       option(value="2") PUBG I
                       option(value="3") PUBG II
                       option(value="4") Testing
-                  .btn-list
-                    button(type="button" class="btn btn-indigo btn-primary btn-lg")
+
+                  button(type="button" class="btn btn-indigo btn-primary btn-lg btn-block" v-if="state.isRandomSoundSelected")
+                    i.fe.fe-music.mr-2
+                    | Play a Random Sound
+
+                  #soundstatus(v-if="!state.isRandomSoundSelected")
+                    .mb-3
+                      #nosound.alert.alert-icon.alert-warning.pt-3.pr-3.pb-3(v-if="state.noSoundSelected")
+                        i.fe.fe-alert-triangle.mr-2(aria-hidden="true")
+                        .blockquote.m-0 No sound selected!
+                      #soundselected.alert.alert-success.p-4(v-if="!state.noSoundSelected")
+                        h4 Selected Sound:
+                        .font-italic.blockquote.m-0 "{{ state.selectedSound.description }}"
+
+                    button.btn.btn-pink.btn-primary.btn-lg(type="button" "v-bind:disabled"="state.noSoundSelected" v-on:click="resetState()")
                       i.fe.fe-music.mr-2
-                      | Play a Random(?) Sound
+                      | {{ state.noSoundSelected ? "Select a Sound Below" : "Play Sound" }}
 
             #text.col-6
               .card
@@ -63,10 +76,29 @@ html(lang='en-AU')
                       | Generate a Text Sentence
 
           .row
-            #sounds.col-12
+            #sounds.col-12(v-if="!state.isRandomSoundSelected")
               .card
                 .card-header
                   h3.card-title.text-bold Sound Library
+                  .card-options
+                    span.tag Total Sounds
+                      span.tag-addon.tag-red.font-weight-bold {{library.length}}
                 .card-body
+                  .form-group
+                    .input-icon.mb-3
+                      span.input-icon-addon
+                        i.fe.fe-search
+                      input(type="text" v-model="state.libraryFilter" class="form-control" placeholder="Filter the Sound Library")
+
+              .row.row-cards.row-deck
+                .col-4(v-for="sound in filteredLibrary")
+                  .card
+                    .card-body
+                      .float-right
+                        button.btn.btn-sm.btn-green.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound; state.noSoundSelected = false;")
+                          i.fe.fe-arrow-up.mr-2
+                          | Select
+                      h4 {{ sound.id }}
+                      p.text-muted {{ sound.description }}
 
   script(src='index.js')
