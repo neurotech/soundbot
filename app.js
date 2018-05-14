@@ -12,7 +12,10 @@ setup((err, results) => {
   if (err) {
     log("error", err);
   } else {
-    log("info", `DND Mode is ${db.get("state.dnd") === 0 ? "off" : "on"}.`);
+    log(
+      "info",
+      `DND Mode is ${db.get("state.dnd").value() === 0 ? "off" : "on"}.`
+    );
     log(
       "success",
       `DB seeded with ${results.text.length} text and ${
