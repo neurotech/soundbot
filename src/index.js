@@ -9,6 +9,9 @@ var demo = new Vue({
       selectedSound: {},
       libraryFilter: ""
     },
+    library: [
+    ]
+  },
   computed: {
     filteredLibrary() {
       if (this.state.libraryFilter === "") return this.library;
