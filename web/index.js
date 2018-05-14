@@ -27,6 +27,15 @@ seaLion.add({
   "/command/randomsound/`channelId`": {
     POST: commands.sound.random
   },
+  "/command/playsound/`channelId`": {
+    POST: commands.sound.play
+  },
+  // "/command/sentence/`channelId`": {
+  //   POST: commands.text.sentence
+  // },
+  // "/command/tts-sentence/`channelId`": {
+  //   POST: commands.text.ttsSentence
+  // },
   "/command/dnd/`onOff`": {
     POST: commands.dnd
   }
