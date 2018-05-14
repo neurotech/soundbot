@@ -8,7 +8,7 @@ A Soundboard bot for Discord
 * Routes for:
   * sentence
   * tts sentence
-  * play specific sound
+  * return array from sounds.json
 
 - Web front end to control bot via REST API
   * Authentication?
