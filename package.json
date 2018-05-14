@@ -14,6 +14,7 @@
     "dev": "http-server build",
     "watch": "watch --interval 1 \"node build.js\" src/",
     "start": "node app.js",
+    "predeploy": "node build.js",
     "deploy": "now --public --local-config now.json && now alias --local-config now.json",
     "clean": "now --local-config now.json rm soundbot --safe --yes"
   },
@@ -26,5 +27,15 @@
     "sentence-generator": "1.0.1",
     "spacetime": "4.1.1",
     "tiny-json-http": "7.0.0"
+  },
+  "devDependencies": {
+    "countup.js": "^1.9.3",
+    "mkdirp": "^0.5.1",
+    "modern-normalize": "^0.4.0",
+    "node-sass": "^4.9.0",
+    "pug": "^2.0.3",
+    "tabler-ui": "0.0.32",
+    "uglify-js": "^3.3.25",
+    "vue": "^2.5.16"
   }
 }
