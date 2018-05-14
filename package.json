@@ -23,6 +23,7 @@
     "ffmpeg-binaries": "3.2.2-3",
     "log-symbols": "2.2.0",
     "node-opus": "0.3.0",
+    "rollbar": "^2.3.9",
     "sea-lion": "2.0.2",
     "sentence-generator": "1.0.1",
     "spacetime": "4.1.1",

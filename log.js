@@ -1,5 +1,6 @@
 const symbols = require("log-symbols");
 const spacetime = require("spacetime");
+const rollbar = require("./rollbar-client");
 
 module.exports = (symbol, message) => {
   var s = spacetime.now();
@@ -16,10 +17,12 @@ module.exports = (symbol, message) => {
 
     case "warning":
       symbolChar = symbols.warning;
+      rollbar.warning(message);
       break;
 
     case "error":
       symbolChar = symbols.error;
+      rollbar.error(message);
       break;
 
     default:
