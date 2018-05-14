@@ -1,16 +1,34 @@
 let config = {
   discord: {
-    token: process.env.DISCORD_SOUNDBOT_TOKEN,
-    guildId: process.env.DISCORD_SOUNDBOT_GUILD_ID,
+    token: process.env.SOUNDBOT_TOKEN,
+    guildId: process.env.SOUNDBOT_GUILD_ID,
     blacklist: {
-      text: process.env.DISCORD_SOUNDBOT_TEXT_CHANNELS_BLACKLIST.split(","),
-      voice: process.env.DISCORD_SOUNDBOT_VOICE_CHANNELS_BLACKLIST.split(",")
+      text: process.env.SOUNDBOT_TEXT_BLACKLIST.split(","),
+      voice: process.env.SOUNDBOT_VOICE_BLACKLIST.split(",")
     }
   },
-  admins: process.env.DISCORD_SOUNDBOT_ADMINS,
-  soundlist: process.env.DISCORD_SOUNDBOT_SOUNDLISTURL,
+  rollbar: {
+    serverToken: process.env.SOUNDBOT_ROLLBAR_SERVER_TOKEN
+  },
+  admins: process.env.SOUNDBOT_ADMINS,
+  soundlist: process.env.SOUNDBOT_SOUNDLISTURL,
   paths: {
     sounds: "sounds"
+  },
+  db: {
+    defaults: {
+      discord: {
+        channels: {
+          text: [],
+          voice: []
+        }
+      },
+      state: {
+        queue: [],
+        isSoundPlaying: 0,
+        dnd: 0
+      }
+    }
   },
   palette: {
     blue: 0x5077f3,
