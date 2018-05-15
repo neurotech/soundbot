@@ -30,6 +30,7 @@
     "sentence-generator": "1.0.1",
     "spacetime": "4.1.1",
     "tiny-json-http": "7.0.0"
+    "vaporwave": "^1.0.4"
   },
   "devDependencies": {
     "browserify": "^16.2.2",
