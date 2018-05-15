@@ -16,11 +16,15 @@ var demo = new Vue({
     filteredLibrary() {
       if (this.state.libraryFilter === "") return this.library;
 
-      return this.library.filter(
-        sound =>
-          sound.id.indexOf(this.state.libraryFilter) > 1 ||
-          sound.description.indexOf(this.state.libraryFilter) > 1
-      );
+      return this.library.filter(sound => {
+        let id = sound.id.toLowerCase();
+        let description = sound.description.toLowerCase();
+
+        return (
+          id.indexOf(this.state.libraryFilter.toLowerCase()) > -1 ||
+          description.indexOf(this.state.libraryFilter.toLowerCase()) > -1
+        );
+      });
     }
   },
   watch: {
