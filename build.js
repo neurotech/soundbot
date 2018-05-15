@@ -2,7 +2,7 @@ const fs = require("fs");
 const mkdirp = require("mkdirp");
 const pug = require("pug");
 const sass = require("node-sass");
-const uglify = require("uglify-js");
+const browserify = require("browserify");
 const log = require("./log");
 
 let buildDir = "./build";
@@ -33,10 +33,10 @@ sass.render(
 );
 log("success", "Compiled Sass to CSS.");
 
-// Uglify JS
-let js = fs.readFileSync("./src/index.js", "utf8");
-fs.writeFileSync("./build/index.js", js, "utf8");
-// fs.writeFileSync("./build/index.js", uglify.minify(js).code, "utf8");
+// Browserify + Uglifyify JS
+let bundler = browserify(__dirname + "/src/index.js");
+bundler.transform("uglifyify", { global: true });
+bundler.bundle().pipe(fs.createWriteStream(__dirname + "/build/index.js"));
 log("success", "Uglified JS.");
 
 // Vendor CSS, JS
