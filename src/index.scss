@@ -1,4 +1,10 @@
+[v-cloak] {
+  display: none !important;
+}
 .btn-primary.disabled,
 .btn-primary:disabled {
   cursor: not-allowed;
+}
+.avatar {
+  background-color: white !important;
 }
