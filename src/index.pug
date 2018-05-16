@@ -12,96 +12,106 @@ html(lang='en-AU')
     script(src='countUp.min.js')
 
   body
-    #app.page
-      #dashboard.page-main
-        .header.mb-5
-          .container
-            .d-flex
-              .header-brand Soundbot
-              .d-flex.order-lg-2.ml-auto
-                .nav-item.d-none.d-md-flex.text-muted Version 3.0.0
-        #container.container
-          .row
-            #voice.col-6
-              .card
-                .card-header
-                  h3.card-title Voice
-                  .card-options
-                    label.custom-switch.m-0
-                      span.mr-3.tag.tag-rounded("v-bind:class"="{ 'tag-blue' : state.isRandomSoundSelected, 'badge-light' : !state.isRandomSoundSelected }") Random Sound
-                      input(type="checkbox" class="custom-switch-input" v-model="state.isRandomSoundSelected")
-                      span(class="custom-switch-indicator")
-                .card-body
-                  .form-group
-                    label.form-label Select a voice channel
-                    select.custom-select.custom-select-lg.mb-3
-                      option(selected) General
-                      option(value="1") HoTS
-                      option(value="2") PUBG I
-                      option(value="3") PUBG II
-                      option(value="4") Testing
+    #app("v-cloak")
+      .page
+        #dashboard.page-main
+          .header.mb-5
+            .container
+              .d-flex
+                .header-brand Soundbot
+                .d-flex.order-lg-2.ml-auto
+                  .nav-item.d-none.d-md-flex.pr-0
+                    .leading-none.nav-link.pr-0
+                      span.ml-2.d-none.d-lg-block.text-right.pr-2
+                        span.text-default(v-if="user.username") {{ user.username }}
+                        small.text-muted.d-block.mt-1(v-if="user.discriminator") &#35;{{ user.discriminator }}
+                      span.avatar(":style"="avatarImage")
 
-                  button(type="button" class="btn btn-indigo btn-primary btn-lg btn-block" v-if="state.isRandomSoundSelected")
-                    i.fe.fe-music.mr-2
-                    | Play a Random Sound
+                      a(href="#")
+                        button.btn.btn-sm.btn-secondary.ml-3(type="button") Logout
 
-                  button.btn.btn-pink.btn-primary.btn-lg(type="button" "v-bind:disabled"="state.noSoundSelected" v-on:click="resetState()" v-if="!state.isRandomSoundSelected")
-                    i.fe.fe-music.mr-2
-                    | {{ state.noSoundSelected ? "Select a Sound Below" : "Play Sound" }}
+          #container.container
+            .row
+              #voice.col-6
+                .card
+                  .card-header
+                    h3.card-title Voice
+                    .card-options
+                      label.custom-switch.m-0
+                        span.mr-3.tag.tag-rounded("v-bind:class"="{ 'tag-blue' : state.isRandomSoundSelected, 'badge-light' : !state.isRandomSoundSelected }") Random Sound
+                        input(type="checkbox" class="custom-switch-input" v-model="state.isRandomSoundSelected")
+                        span(class="custom-switch-indicator")
+                  .card-body
+                    .form-group
+                      label.form-label Select a voice channel
+                      select.custom-select.custom-select-lg.mb-3
+                        option(selected) General
+                        option(value="1") HoTS
+                        option(value="2") PUBG I
+                        option(value="3") PUBG II
+                        option(value="4") Testing
 
-            #text.col-6
-              .card
-                .card-header
-                  h3.card-title.text-bold Text
-                .card-body
-                  .form-group
-                    label.form-label Select a text channel
-                    select.custom-select.custom-select-lg.mb-3
-                      option(selected) #bluehole
-                  .btn-list
-                    button(type="button" class="btn btn-azure btn-primary btn-lg")
-                      i.fe.fe-mic.mr-2
-                      | Generate a TTS Sentence
-                    button(type="button" class="btn btn-green btn-primary btn-lg")
-                      i.fe.fe-book-open.mr-2
-                      | Generate a Text Sentence
+                    button(type="button" class="btn btn-indigo btn-primary btn-lg btn-block" v-if="state.isRandomSoundSelected")
+                      i.fe.fe-music.mr-2
+                      | Play a Random Sound
 
-          .row.row-cards.row-deck(v-if="!state.isRandomSoundSelected")
-            #sounds.col-7
-              .card
-                .card-header
-                  h3.card-title.text-bold Sound Library
-                  .card-options
-                    span.tag Total Sounds
-                      span.tag-addon.tag-red.font-weight-bold {{library.length}}
-                .card-body
-                  .row
-                    .col-6
-                      .input-icon
-                        span.input-icon-addon
-                          i.fe.fe-search
-                        input(type="text" v-model="state.libraryFilter" class="form-control" placeholder="Filter the Sound Library")
-                    .col-6
-                      button.btn.btn-block.btn-orange Give me a shuffle
+                    button.btn.btn-pink.btn-primary.btn-lg(type="button" "v-bind:disabled"="state.noSoundSelected" v-on:click="resetState()" v-if="!state.isRandomSoundSelected")
+                      i.fe.fe-music.mr-2
+                      | {{ state.noSoundSelected ? "Select a Sound Below" : "Play Sound" }}
 
-            #sound-info.col-5(v-if="!state.isRandomSoundSelected")
-              .mb-3
-                #nosound.alert.alert-icon.alert-warning.pt-3.pr-3.pb-3(v-if="state.noSoundSelected")
-                  i.fe.fe-alert-triangle.mr-2(aria-hidden="true")
-                  .blockquote.m-0 No sound selected!
-                #soundselected.alert.alert-success.p-4(v-if="!state.noSoundSelected")
-                  h4 Selected Sound:
-                  .font-italic.blockquote.m-0 "{{ state.selectedSound.description }}"
+              #text.col-6
+                .card
+                  .card-header
+                    h3.card-title.text-bold Text
+                  .card-body
+                    .form-group
+                      label.form-label Select a text channel
+                      select.custom-select.custom-select-lg.mb-3
+                        option(selected) #bluehole
+                    .btn-list
+                      button(type="button" class="btn btn-azure btn-primary btn-lg")
+                        i.fe.fe-mic.mr-2
+                        | Generate a TTS Sentence
+                      button(type="button" class="btn btn-green btn-primary btn-lg")
+                        i.fe.fe-book-open.mr-2
+                        | Generate a Text Sentence
 
-          .row.row-cards.row-deck(v-if="!state.isRandomSoundSelected")
-            .col-3(v-for="sound in filteredLibrary")
-              .card
-                .card-body.p-4
-                  h4.mb-2 {{ sound.id }}
-                  p.text-muted {{ sound.description }}
-                .card-footer.p-3
-                  button.btn.btn-sm.btn-green.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound; state.noSoundSelected = false;")
-                    i.fe.fe-arrow-up.mr-2
-                    | Select
+            .row.row-cards.row-deck(v-if="!state.isRandomSoundSelected")
+              #sounds.col-7
+                .card
+                  .card-header
+                    h3.card-title.text-bold Sound Library
+                    .card-options
+                      span.tag Total Sounds
+                        span.tag-addon.tag-red.font-weight-bold {{library.length}}
+                  .card-body
+                    .row
+                      .col-6
+                        .input-icon
+                          span.input-icon-addon
+                            i.fe.fe-search
+                          input(type="text" v-model="state.libraryFilter" class="form-control" placeholder="Filter the Sound Library")
+                      .col-6
+                        button.btn.btn-block.btn-orange Give me a shuffle
+
+              #sound-info.col-5(v-if="!state.isRandomSoundSelected")
+                .mb-3
+                  #nosound.alert.alert-icon.alert-warning.pt-3.pr-3.pb-3(v-if="state.noSoundSelected")
+                    i.fe.fe-alert-triangle.mr-2(aria-hidden="true")
+                    .blockquote.m-0 No sound selected!
+                  #soundselected.alert.alert-success.p-4(v-if="!state.noSoundSelected")
+                    h4 Selected Sound:
+                    .font-italic.blockquote.m-0 "{{ state.selectedSound.description }}"
+
+            .row.row-cards.row-deck(v-if="!state.isRandomSoundSelected")
+              .col-3(v-for="sound in filteredLibrary")
+                .card
+                  .card-body.p-4
+                    h4.mb-2 {{ sound.id }}
+                    p.text-muted {{ sound.description }}
+                  .card-footer.p-3
+                    button.btn.btn-sm.btn-green.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound; state.noSoundSelected = false;")
+                      i.fe.fe-arrow-up.mr-2
+                      | Select
 
   script(src='index.js')
