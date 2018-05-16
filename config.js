@@ -2,6 +2,10 @@ let config = {
   discord: {
     token: process.env.SOUNDBOT_TOKEN,
     guildId: process.env.SOUNDBOT_GUILD_ID,
+    auth: {
+      clientId: process.env.SOUNDBOT_AUTH_CLIENTID,
+      clientSecret: process.env.SOUNDBOT_AUTH_SECRET
+    },
     blacklist: {
       text: process.env.SOUNDBOT_TEXT_BLACKLIST.split(","),
       voice: process.env.SOUNDBOT_VOICE_BLACKLIST.split(",")
