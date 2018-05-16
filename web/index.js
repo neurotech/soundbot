@@ -1,7 +1,11 @@
+const http = require("http");
 const SeaLion = require("sea-lion");
 const Dion = require("dion");
 const seaLion = new SeaLion();
 const dion = new Dion(seaLion);
+const authom = require("authom");
+const config = require("../config");
+const discord = require("./auth/discord");
 const log = require("../log");
 const api = require("./api");
 const commands = require("./commands");
@@ -41,14 +45,26 @@ seaLion.add({
   }
 });
 
-var router = new SeaLion();
+authom.customServices.discord = discord;
+authom.createServer({
+  service: "discord",
+  id: config.discord.auth.clientId,
+  secret: config.discord.auth.clientSecret,
+  scope: "identify"
+});
+
+authom.on("auth", function(req, res, data) {
+  res.writeHead(302, { Location: "/?token=" + data.token });
+  res.end();
+});
 
 module.exports = {
   start: () => {
-    var port = 4567;
-    require("http")
-      .createServer(seaLion.createHandler())
-      .listen(port);
+    let port = 4567;
+    let server = http.createServer(seaLion.createHandler());
+
+    authom.listen(server);
+    server.listen(port);
     log("info", `Started web server on port ${port}.`);
   }
 };
