@@ -1,3 +1,5 @@
+const cpjax = require("cpjax");
+
 let params = new URLSearchParams(document.location.search.substring(1));
 let urlToken = params.get("token");
 if (urlToken) {
@@ -10,12 +12,18 @@ Vue.config.devtools = true;
 var app = new Vue({
   el: "#app",
   data: {
-    token: "",
+    token: null,
     user: {},
+    channels: {},
+    queue: [
+    ],
     state: {
+      queue: 5,
       isRandomSoundSelected: false,
       noSoundSelected: true,
       selectedSound: {},
+      selectedTextChannel: null,
+      selectedVoiceChannel: null,
       libraryFilter: ""
     },
     library: [
@@ -45,13 +53,13 @@ var app = new Vue({
     }
   },
   watch: {
-    // "path.to.thing": function (val, oldVal) {
-    //   countItUp("ELEMENT", oldVal, val);
-    // }
+    "state.queue": function(val, oldVal) {
+      countItUp("queue-count", oldVal, val);
+    }
   },
   created: function() {
-    // this.fetchData();
     this.tokenCheck();
+    this.getChannels();
   },
 
   methods: {
@@ -67,40 +75,43 @@ var app = new Vue({
         this.getUserDetails(tokenPresence);
       }
     },
+    getChannels: function() {
+      var self = this;
+      cpjax(
+        {
+          url: "/api/discord/channels",
+          requestedWith: false
+        },
+        (err, data) => {
+          let parsed = JSON.parse(data);
+          self.channels = parsed;
+          if (self.state.selectedVoiceChannel === null)
+            self.state.selectedVoiceChannel = parsed.voice[0].id;
+
+          if (self.state.selectedTextChannel === null)
+            self.state.selectedTextChannel = parsed.text[0].id;
+        }
+      );
+    },
     getUserDetails: function(discordToken) {
       var self = this;
       if (discordToken.length > 0) {
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-
-        xhr.addEventListener("readystatechange", function() {
-          if (this.readyState === 4) {
-            self.user = JSON.parse(this.responseText);
+        cpjax(
+          {
+            url: "https://discordapp.com/api/users/@me",
+            auth: `Bearer ${discordToken}`,
+            requestedWith: false
+          },
+          (err, data) => {
+            self.user = JSON.parse(data);
           }
-        });
-
-        xhr.open("GET", "https://discordapp.com/api/users/@me");
-        xhr.setRequestHeader("Authorization", "Bearer " + discordToken);
-
-        xhr.send();
+        );
       }
+    },
+    logoutUser: function() {
+      sessionStorage.removeItem("discordToken");
+      window.location.replace("/auth/discord");
     }
-
-    // fetchData: function() {
-    //   var request = new XMLHttpRequest();
-    //   var self = this;
-    //   request.open("GET", url, true);
-    //   request.onreadystatechange = function() {
-    //     if (request.readyState === 4) {
-    //       if (request.status === 200) {
-    //         var response = JSON.parse(request.responseText);
-    //         self.data = response.data;
-    //       } else {
-    //       }
-    //     }
-    //   };
-    //   request.send(null);
-    // }
   },
   mounted: function() {
     // this.updateData = setInterval(this.fetchData, 1000 * 60 * 2);
