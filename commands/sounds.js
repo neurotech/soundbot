@@ -43,6 +43,7 @@ let sounds = {
     }
 
     if (typeof file === "string") {
+      db.set("lastSoundPlayedAt", new Date()).write();
       voiceChannel
         .join()
         .then(connection => {
@@ -101,6 +102,7 @@ let sounds = {
     let random = selection.slice(0, 1);
     let file = `./${config.paths.sounds}/${random[0].file}`;
     let lastSoundPlayed = random[0];
+    db.set("lastSoundPlayedAt", new Date()).write();
 
     voiceChannel
       .join()
