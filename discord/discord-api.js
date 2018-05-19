@@ -1,6 +1,6 @@
 const tiny = require("tiny-json-http");
 const spacetime = require("spacetime");
-const discord = require("./discord-client");
+const client = require("./discord-client");
 const config = require("../config");
 const db = require("../db");
 
@@ -24,6 +24,13 @@ module.exports = {
         }
       }
     );
+  },
+  getCurrentVoiceChannel: () => {
+    let connection = client.guilds.first().voiceConnection;
+    let channel = null;
+    if (connection) channel = connection.channel;
+
+    return channel;
   }
 };
 
