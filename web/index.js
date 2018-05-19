@@ -3,7 +3,9 @@ const SeaLion = require("sea-lion");
 const Dion = require("dion");
 const seaLion = new SeaLion();
 const dion = new Dion(seaLion);
+const websockets = require("./websockets");
 const authom = require("authom");
+
 const config = require("../config");
 const discord = require("./auth/discord");
 const log = require("../log");
@@ -62,6 +64,8 @@ module.exports = {
   start: () => {
     let port = 4567;
     let server = http.createServer(seaLion.createHandler());
+    let io = require("socket.io")(server);
+    websockets(io);
 
     authom.listen(server);
     server.listen(port);
