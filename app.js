@@ -31,7 +31,7 @@ setup((err, results) => {
       if (err) {
         log("error", err);
       } else {
-        log("success", `Scheduled ${tasks} task(s).`);
+        log("success", `Scheduled ${tasks} tasks.`);
       }
     });
 
@@ -74,6 +74,8 @@ process.on("exit", () => {
 process.on("uncaughtException", err => {
   client.destroy();
   log("error", `Uncaught exception!`);
+  if (err.code) log("error", err.code);
+  if (err.message) log("error", err.message);
   log("error", err.stack);
   process.exit(1);
 });
