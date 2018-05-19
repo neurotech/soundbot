@@ -52,6 +52,9 @@ fs
 fs
   .createReadStream("./node_modules/countup.js/dist/countUp.min.js")
   .pipe(fs.createWriteStream("./build/countUp.min.js"));
+fs
+  .createReadStream("./node_modules/socket.io-client/dist/socket.io.js")
+  .pipe(fs.createWriteStream("./build/socket.io.js"));
 log("success", "Built vendor CSS and JS.");
 
 // Fonts

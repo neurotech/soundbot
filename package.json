@@ -32,6 +32,7 @@
     "rollbar": "^2.3.9",
     "sea-lion": "2.0.2",
     "sentence-generator": "1.0.1",
+    "socket.io": "^2.1.1",
     "spacetime": "4.1.1",
     "tiny-json-http": "7.0.0",
     "vaporwave": "^1.0.4"
