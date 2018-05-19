@@ -7,6 +7,46 @@ if (urlToken) {
   window.history.replaceState({}, document.title, "/");
 }
 
+// socket.io
+const socket = io();
+
+// Data
+socket.on("queue:populate", function(queue) {
+  if (queue.length > 0) {
+    app.queue = queue;
+    console.log(`🤖 -- Queue populated with ${queue.length} item(s).`);
+  }
+});
+socket.on("queue:add-item", function(item) {
+  app.queue.push(item);
+});
+socket.on("queue:remove-item", function(item) {
+  let itemLocation = app.queue
+    .map(function(e) {
+      return e.id;
+    })
+    .indexOf(item.id);
+
+  app.queue.splice(itemLocation, 1);
+});
+
+// State
+socket.on("connect", function() {
+  app.state.socket = "connected";
+});
+socket.on("connect_error", function() {
+  app.state.socket = "disconnected";
+});
+socket.on("reconnect_error", function() {
+  app.state.socket = "disconnected";
+});
+socket.on("reconnect_failed", function() {
+  app.state.socket = "disconnected";
+});
+socket.on("reconnect_attempt", function() {
+  app.state.socket = "connecting";
+});
+
 Vue.config.devtools = true;
 
 var app = new Vue({
@@ -15,10 +55,9 @@ var app = new Vue({
     token: null,
     user: {},
     channels: {},
-    queue: [
-    ],
     state: {
       queue: 5,
+      socket: "disconnected",
       isRandomSoundSelected: false,
       noSoundSelected: true,
       selectedSound: {},
@@ -26,6 +65,10 @@ var app = new Vue({
       selectedVoiceChannel: null,
       libraryFilter: ""
     },
+    socket: {
+      error: false
+    },
+    queue: [],
     library: [
     ]
   },
@@ -55,6 +98,9 @@ var app = new Vue({
   watch: {
     "state.queue": function(val, oldVal) {
       countItUp("queue-count", oldVal, val);
+    },
+    queue: function(val, oldVal) {
+      this.state.queue = val.length;
     }
   },
   created: function() {
@@ -83,6 +129,8 @@ var app = new Vue({
           requestedWith: false
         },
         (err, data) => {
+          if (err) return console.error(err);
+
           let parsed = JSON.parse(data);
           self.channels = parsed;
           if (self.state.selectedVoiceChannel === null)
@@ -103,6 +151,7 @@ var app = new Vue({
             requestedWith: false
           },
           (err, data) => {
+            if (err) return console.error(err);
             self.user = JSON.parse(data);
           }
         );
@@ -111,6 +160,66 @@ var app = new Vue({
     logoutUser: function() {
       sessionStorage.removeItem("discordToken");
       window.location.replace("/auth/discord");
+    },
+    playRandomSound: function() {
+      // check for "last sound queued at"
+      // if ok, POST
+      // if not, set error somewhere?
+      var channel = this.state.selectedVoiceChannel;
+      cpjax(
+        {
+          method: "POST",
+          url: `/command/randomsound/${channel}`
+        },
+        (err, data) => {
+          if (err) return console.error(err);
+        }
+      );
+    },
+    playSound: function() {
+      // check for "last sound queued at"
+      // if ok, POST
+      // if not, set error somewhere?
+      var selectedSound = this.state.selectedSound;
+      var channel = this.state.selectedVoiceChannel;
+      cpjax(
+        {
+          method: "POST",
+          url: `/command/playsound/${channel}`,
+          data: JSON.stringify(selectedSound)
+        },
+        (err, data) => {
+          if (err) return console.error(err);
+        }
+      );
+    },
+    textSentence: function() {
+      var channel = this.state.selectedTextChannel;
+      var author = this.user.username;
+      cpjax(
+        {
+          method: "POST",
+          url: `/command/sentence/${channel}`,
+          data: author
+        },
+        (err, data) => {
+          if (err) return console.error(err);
+        }
+      );
+    },
+    ttsSentence: function() {
+      var channel = this.state.selectedTextChannel;
+      var author = this.user.username;
+      cpjax(
+        {
+          method: "POST",
+          url: `/command/tts-sentence/${channel}`,
+          data: author
+        },
+        (err, data) => {
+          if (err) return console.error(err);
+        }
+      );
     }
   },
   mounted: function() {

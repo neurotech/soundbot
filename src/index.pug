@@ -9,6 +9,7 @@ html(lang='en-AU')
     link(rel='stylesheet', href='index.css')
     link(rel='stylesheet', href='dashboard.css')
     script(src='vue.min.js')
+    script(src='socket.io.js')
     script(src='countUp.min.js')
 
   body
@@ -25,7 +26,9 @@ html(lang='en-AU')
                       span.ml-2.d-none.d-lg-block.text-right.pr-2
                         span.text-default(v-if="user.username") {{ user.username }}
                         small.text-muted.d-block.mt-1(v-if="user.discriminator") &#35;{{ user.discriminator }}
-                      span.avatar(":style"="avatarImage")
+                      #status-wrapper
+                        span.avatar(":style"="avatarImage")
+                        span#status-icon("v-bind:class"="{ 'status-connected' : state.socket === 'connected', 'status-connecting' : state.socket === 'connecting', 'status-disconnected' : state.socket === 'disconnected' }" v-if="user.username")
 
                       a(href="/auth/discord" v-if="!token")
                         button.btn.btn-sm.btn-secondary.ml-3(type="button") Login
@@ -46,10 +49,10 @@ html(lang='en-AU')
                             option(v-for="channel in channels.text" "v-bind:value"="channel.id") &#x1F535; {{ channel.name }}
                         .col-6
                           .btn-list
-                            button(type="button" class="btn btn-block btn-azure btn-primary")
+                            button(type="button" class="btn btn-block btn-azure btn-primary" "v-on:click"="ttsSentence")
                               i.fe.fe-mic.mr-2
                               | Send a TTS Sentence
-                            button(type="button" class="btn btn-block btn-green btn-primary")
+                            button(type="button" class="btn btn-block btn-green btn-primary" "v-on:click"="textSentence")
                               i.fe.fe-book-open.mr-2
                               | Send a Text Sentence
 
@@ -68,14 +71,14 @@ html(lang='en-AU')
                           select(v-model="state.selectedVoiceChannel").custom-select
                             option(v-for="channel in channels.voice" "v-bind:value"="channel.id") &#x1F4E2; {{ channel.name }}
                         .col-6
-                          button(type="button" class="btn btn-indigo btn-primary btn-block" v-if="state.isRandomSoundSelected")
+                          button(type="button" class="btn btn-indigo btn-primary btn-block" v-if="state.isRandomSoundSelected" "v-on:click"="playRandomSound")
                             i.fe.fe-music.mr-2
                             | Play a Random Sound
 
                           button.btn.btn-primary.btn-block(
                             type="button"
                             v-if="!state.isRandomSoundSelected"
-                            "v-on:click"="resetState()"
+                            "v-on:click"="playSound"
                             "v-bind:class"="{ 'btn-secondary' : !state.selectedSound.id, 'btn-pink' : state.selectedSound.id }"
                             "v-bind:disabled"="!state.selectedSound.id"
                           )
@@ -85,6 +88,13 @@ html(lang='en-AU')
                             span(v-else)
                               i.fe.fe-music.mr-2
                               | Play Sound
+                      .row
+                        #sound-info.col.mt-4(v-if="!state.isRandomSoundSelected")
+                          #nosound(v-if="!state.selectedSound.id") No sound selected!
+                          #soundselected(v-if="state.selectedSound.id")
+                            strong Selected Sound:
+                            div "{{ state.selectedSound.description }}"
+
               .col-6
                 #queue
                   .card
@@ -93,55 +103,45 @@ html(lang='en-AU')
                       .card-options
                         span.tag Items in Queue:
                           span#queue-count.tag-addon.tag-orange.font-weight-bold {{state.queue}}
-                    .card-alert.alert.alert-icon.alert-warning.mb-0(v-if="state.queue === 0")
-                      i.fe.fe-loader.ml-1.mr-2
-                      | The queue is empty, go hog wild!
-                    .table-responsive
-                      table.table.card-table.table-vcenter
-                        tbody
-                          tr(v-for="item in queue")
-                            td.w-1.font-weight-bold {{ item.position }}
-                            td.w-1
-                              span.avatar(":style"="item.avatar")
-                            td.font-weight-bold {{ item.username }}
-                            td
+                    #queue-body
+                      .card-alert.alert.alert-icon.alert-warning.mb-0(v-if="state.queue === 0")
+                        i.fe.fe-loader.ml-1.mr-2
+                        | The queue is empty, go hog wild!
+                      .card-alert.alert.alert-icon.alert-danger.mb-0(v-if="socket.error")
+                        i.fe.fe-alert-triangle.ml-1.mr-2
+                        | Can't connect to Soundbot!
+                      .card-body.p-0
+                        transition-group(name="list-complete" tag="span")
+                          span#queue-row(v-for="(item, index) in queue" v-bind:key="item" class="row mx-0 py-2 align-items-center list-complete-item")
+                            span.col-1.text-center
+                              .font-weight-bold {{ index + 1 }}
+                            span.col
+                              .avatar(":style"="item.avatar")
+                            span.col-4
+                              .font-weight-bold {{ item.username }}
+                            span.col-3
                               .tag(":class"="item.tag") {{ item.action }}
-                            td
+                            span.col
                               code {{ item.destination }}
 
-            .row.row-cards.row-deck(v-if="!state.isRandomSoundSelected")
-              #sounds.col-7
-                .card
-                  .card-header
-                    h3.card-title.text-bold Sound Library
-                  .card-body
-                    .row
-                      .col-6
-                        .input-icon
-                          span.input-icon-addon
-                            i.fe.fe-search
-                          input(type="text" v-model="state.libraryFilter" class="form-control" placeholder="Filter the Sound Library")
-                      .col-6
-                        button.btn.btn-block.btn-orange Give me a shuffle
-
-              #sound-info.col-5(v-if="!state.isRandomSoundSelected")
-                .mb-3
-                  #nosound.alert.alert-icon.alert-warning.pt-3.pr-3.pb-3(v-if="!state.selectedSound.id")
-                    i.fe.fe-alert-triangle.mr-2(aria-hidden="true")
-                    .blockquote.m-0 No sound selected!
-                  #soundselected.alert.alert-success.p-4(v-if="state.selectedSound.id")
-                    h4 Selected Sound:
-                    .font-italic.blockquote.m-0 "{{ state.selectedSound.description }}"
-
-            .row.row-cards.row-deck(v-if="!state.isRandomSoundSelected")
-              .col-3(v-for="sound in filteredLibrary")
-                .card
-                  .card-body.p-4
-                    h4.mb-2 {{ sound.id }}
-                    p.text-muted {{ sound.description }}
-                  .card-footer.p-3
-                    button.btn.btn-sm.btn-green.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound;")
-                      i.fe.fe-arrow-up.mr-2
-                      | Select
+            #sounds(v-if="!state.isRandomSoundSelected")
+              .card
+                .card-header
+                  h3.card-title.text-bold Sound Library
+                  .card-options
+                    .input-icon
+                      span.input-icon-addon
+                        i.fe.fe-search
+                      input(type="text" v-model="state.libraryFilter" class="form-control" placeholder="Filter the Library")
+                .table-responsive
+                  table.table.card-table.table-striped.table-vcenter
+                    tbody
+                      tr(v-for="sound in filteredLibrary")
+                        td.w-1
+                          a(href="#")
+                            button.btn.btn-sm.btn-green.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound;")
+                              i.fe.fe-arrow-up.mr-2
+                              | Select
+                        td.col {{ sound.description }}
 
   script(src='index.js')

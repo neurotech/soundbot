@@ -8,3 +8,73 @@
 .avatar {
   background-color: white !important;
 }
+#status-wrapper {
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+}
+#status-icon {
+  position: absolute;
+  background-color: #cfcfcf;
+  background-clip: border-box;
+  border: 2px solid white;
+  border-radius: 999px;
+  width: 14px;
+  height: 14px;
+  bottom: -4px;
+  right: -2px;
+}
+#status-icon.status-connected {
+  background-color: #5eba00;
+}
+#status-icon.status-connecting {
+  background-color: #ffcc00;
+}
+#status-icon.status-disconnected {
+  background-color: #cd2020;
+}
+#queue-body {
+  min-height: 200px;
+  max-height: 500px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+#queue-body #queue-row {
+  border-bottom: 1px solid #dee2e6;
+}
+#nosound {
+  border: 2px dashed #f1e2a3;
+  background-color: #fcf3cf;
+  background-clip: padding-box;
+  color: #b89a21;
+  border-radius: 5px;
+  text-align: center;
+  padding: 0.8rem;
+  font-weight: bold;
+}
+#soundselected {
+  border: 2px solid #d2ecb8;
+  background-color: #dff1cc;
+  background-clip: padding-box;
+  color: #316100;
+  border-radius: 5px;
+  text-align: center;
+  padding: 0.8rem;
+}
+.list-complete-item {
+  transition: all 0.45s;
+}
+.list-complete-move {
+  transition: all 0.45s;
+}
+.list-complete-enter,
+.list-complete-leave-to {
+  opacity: 0;
+  transform: translateX(50px);
+}
+.list-complete-leave-active {
+  transition: all 0.45s;
+}
+.list-complete-leave {
+  transition: all 0.45s;
+}
