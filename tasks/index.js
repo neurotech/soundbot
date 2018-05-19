@@ -6,6 +6,9 @@ const log = require("../log");
 let hourly = new schedule.RecurrenceRule();
 hourly.minute = 0;
 
+let minute = 1000 * 60;
+let threeMinutes = minute * 5;
+
 const tasks = {
   schedule: callback => {
     schedule.scheduleJob(hourly, () => {
@@ -20,7 +23,22 @@ const tasks = {
         );
       });
     });
-    callback(null, 1);
+    let voiceCheck = setInterval(() => {
+      let now = new Date();
+      let lastPlayed = new Date(db.get("lastSoundPlayedAt").value());
+      let currentVoiceChannel = discord.getCurrentVoiceChannel();
+
+      if (currentVoiceChannel) {
+        // https://stackoverflow.com/a/15437397
+        let diff = now.getTime() - lastPlayed.getTime();
+        let diffInMinutes = Math.round(diff / 60000);
+        if (diffInMinutes > 5) {
+          currentVoiceChannel.leave();
+        }
+      }
+    }, threeMinutes);
+
+    callback(null, 2);
   }
 };
 
