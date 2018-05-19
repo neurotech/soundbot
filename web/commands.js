@@ -1,4 +1,5 @@
 const sounds = require("../commands/sounds");
+const sentence = require("../commands/sentence");
 const db = require("../db");
 const util = require("./util");
 const log = require("../log");
@@ -36,7 +37,7 @@ let commands = {
         });
         request.on("end", function() {
           let soundObject = JSON.parse(payload);
-          if (tokens.channelId && typeof tokens.channelId === "string") {
+          if (tokens.channelId) {
             var channelId = tokens.channelId.toString();
             var isValidChannelId = db
               .get("discord.channels.voice")
@@ -65,7 +66,7 @@ let commands = {
           response
         );
       } else {
-        if (tokens.channelId && typeof tokens.channelId === "string") {
+        if (tokens.channelId) {
           var channelId = tokens.channelId.toString();
           var isValidChannelId = db
             .get("discord.channels.voice")
@@ -81,6 +82,78 @@ let commands = {
             util.sendResponse(400, "ERROR", "Invalid channel ID!", response);
           }
         }
+      }
+    }
+  },
+  text: {
+    sentence: function(request, response, tokens) {
+      var dnd = db.get("state.dnd").value();
+      if (dnd === 1) {
+        util.sendResponse(
+          503,
+          "UNAVAILABLE",
+          "Do not disturb is on.",
+          response
+        );
+      } else {
+        let payload = "";
+        request.on("data", function(data) {
+          payload += data;
+        });
+        request.on("end", function() {
+          let author = payload;
+          if (tokens.channelId) {
+            var channelId = tokens.channelId.toString();
+            var isValidChannelId = db
+              .get("discord.channels.text")
+              .find({ id: channelId })
+              .value();
+
+            if (isValidChannelId) {
+              sentence.sentence(null, channelId, author, (err, result) => {
+                if (err) util.sendResponse(400, "ERROR", err, response);
+                util.sendResponse(200, "OK", result, response);
+              });
+            } else {
+              util.sendResponse(400, "ERROR", "Invalid channel ID!", response);
+            }
+          }
+        });
+      }
+    },
+    ttsSentence: function(request, response, tokens) {
+      var dnd = db.get("state.dnd").value();
+      if (dnd === 1) {
+        util.sendResponse(
+          503,
+          "UNAVAILABLE",
+          "Do not disturb is on.",
+          response
+        );
+      } else {
+        let payload = "";
+        request.on("data", function(data) {
+          payload += data;
+        });
+        request.on("end", function() {
+          let author = payload;
+          if (tokens.channelId) {
+            var channelId = tokens.channelId.toString();
+            var isValidChannelId = db
+              .get("discord.channels.text")
+              .find({ id: channelId })
+              .value();
+
+            if (isValidChannelId) {
+              sentence.tts(null, channelId, author, (err, result) => {
+                if (err) util.sendResponse(400, "ERROR", err, response);
+                util.sendResponse(200, "OK", result, response);
+              });
+            } else {
+              util.sendResponse(400, "ERROR", "Invalid channel ID!", response);
+            }
+          }
+        });
       }
     }
   }
