@@ -14,6 +14,7 @@ const socket = io();
 socket.on("queue:populate", function(queue) {
   if (queue.length > 0) {
     app.queue = queue;
+    app.state.queue = queue.length;
     console.log(`🤖 -- Queue populated with ${queue.length} item(s).`);
   }
 });
@@ -23,9 +24,9 @@ socket.on("queue:add-item", function(item) {
 socket.on("queue:remove-item", function(item) {
   let itemLocation = app.queue
     .map(function(e) {
-      return e.id;
+      return e.queueId;
     })
-    .indexOf(item.id);
+    .indexOf(item.queueId);
 
   app.queue.splice(itemLocation, 1);
 });
@@ -56,7 +57,7 @@ var app = new Vue({
     user: {},
     channels: {},
     state: {
-      queue: 5,
+      queue: 0,
       socket: "disconnected",
       isRandomSoundSelected: false,
       noSoundSelected: true,
