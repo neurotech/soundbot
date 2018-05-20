@@ -1,8 +1,10 @@
+const crypto = require("crypto");
 const sounds = require("../commands/sounds");
 const sentence = require("../commands/sentence");
 const db = require("../db");
 const util = require("./util");
 const log = require("../log");
+const queue = require("../action-queue");
 
 let commands = {
   dnd: (request, response, tokens) => {
@@ -110,10 +112,30 @@ let commands = {
               .value();
 
             if (isValidChannelId) {
-              sentence.sentence(null, channelId, author, (err, result) => {
-                if (err) util.sendResponse(400, "ERROR", err, response);
-                util.sendResponse(200, "OK", result, response);
-              });
+              let queueId = crypto.randomBytes(16).toString("hex");
+              queue.add(
+                function(cb) {
+                  sentence.sentence(
+                    null,
+                    channelId,
+                    author,
+                    queueId,
+                    (err, result) => {
+                      if (err) {
+                        util.sendResponse(400, "ERROR", err, response);
+                      }
+                      util.sendResponse(200, "OK", result, response);
+                      cb(null, result);
+                    }
+                  );
+                },
+                {
+                  queueId: queueId,
+                  username: author,
+                  action: "Text Sentence",
+                  destination: isValidChannelId.name
+                }
+              );
             } else {
               util.sendResponse(400, "ERROR", "Invalid channel ID!", response);
             }
