@@ -27,9 +27,10 @@ let config = {
           voice: []
         }
       },
+      queue: {
+        items: []
+      },
       state: {
-        queue: [],
-        isSoundPlaying: 0,
         dnd: 0
       }
     }
