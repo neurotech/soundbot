@@ -3,10 +3,10 @@ const SeaLion = require("sea-lion");
 const Dion = require("dion");
 const seaLion = new SeaLion();
 const dion = new Dion(seaLion);
-const websockets = require("./websockets");
 const authom = require("authom");
 
 const config = require("../config");
+const db = require("../db");
 const discord = require("./auth/discord");
 const log = require("../log");
 const api = require("./api");
@@ -60,13 +60,18 @@ authom.on("auth", function(req, res, data) {
   res.end();
 });
 
+let port = 4567;
+let queueState = db.get("queue.items").value() || 0;
+let server = http.createServer(seaLion.createHandler());
+let io = require("socket.io")(server);
+let queue = require("../action-queue").context(io);
+
+io.on("connection", function(socket) {
+  socket.emit("queue:populate", queueState);
+});
+
 module.exports = {
   start: () => {
-    let port = 4567;
-    let server = http.createServer(seaLion.createHandler());
-    let io = require("socket.io")(server);
-    websockets(io);
-
     authom.listen(server);
     server.listen(port);
     log("info", `Started web server on port ${port}.`);
