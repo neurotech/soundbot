@@ -11,6 +11,7 @@ let config = {
       voice: process.env.SOUNDBOT_VOICE_BLACKLIST.split(",")
     }
   },
+  validTokens: process.env.SOUNDBOT_VALID_TOKENS,
   rollbar: {
     serverToken: process.env.SOUNDBOT_ROLLBAR_SERVER_TOKEN
   },
@@ -27,6 +28,7 @@ let config = {
           voice: []
         }
       },
+      tokens: [],
       queue: {
         items: []
       },

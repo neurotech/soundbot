@@ -6,6 +6,7 @@
     "SOUNDBOT_TOKEN": "@soundbot-token",
     "SOUNDBOT_AUTH_CLIENTID": "@soundbot-auth-clientid",
     "SOUNDBOT_AUTH_SECRET": "@soundbot-auth-secret",
+    "SOUNDBOT_VALID_TOKENS": "@soundbot-valid-tokens",
     "SOUNDBOT_GUILD_ID": "@soundbot-guild-id",
     "SOUNDBOT_TEXT_BLACKLIST": "@soundbot-text-blacklist",
     "SOUNDBOT_VOICE_BLACKLIST": "@soundbot-voice-blacklist",
