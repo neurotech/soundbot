@@ -34,13 +34,21 @@
   background-color: #cd2020;
 }
 #queue-body {
-  min-height: 200px;
-  max-height: 500px;
+  min-height: 300px;
+  max-height: 300px;
   overflow-x: hidden;
   overflow-y: hidden;
 }
+#queue-body #queue-header {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid #dee2e6;
+}
 #queue-body #queue-row {
   border-bottom: 1px solid #dee2e6;
+}
+
+#queue-body #queue-row:nth-of-type(even) {
+  background-color: rgba(0, 0, 0, 0.02);
 }
 #nosound {
   border: 2px dashed #f1e2a3;
@@ -77,4 +85,12 @@
 }
 .list-complete-leave {
   transition: all 0.45s;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.33s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
