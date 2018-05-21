@@ -5,6 +5,10 @@ const discord = require("./discord/discord-api");
 module.exports = callback => {
   db.defaults(config.db.defaults).write();
 
+  // Add valid tokens to db
+  let validtokens = config.validTokens.split("|");
+  db.set("tokens", validtokens).write();
+
   // Get list of channnels from Discord API
   discord.getChannels((err, channels) => {
     if (err) return callback(err);
