@@ -20,15 +20,20 @@ seaLion.add({
     GET: dion.serveDirectory("./build", {
       ".css": "text/css",
       ".js": "application/javascript",
+      ".map": "application/octet-stream",
       ".svg": "image/svg+xml",
       ".gif": "image/gif",
       ".png": "image/png",
       ".jpg": "image/jpeg",
+      ".ico": "image/x-icon",
       ".woff": "font/woff"
     })
   },
   "/api/discord/channels": {
     GET: api.web.discord.channels
+  },
+  "/api/sounds/list": {
+    GET: api.web.sounds.list
   },
   "/command/randomsound/`channelId`": {
     POST: commands.sound.random
