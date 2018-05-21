@@ -35,12 +35,12 @@ const sentence = {
       }, 2000);
     }
   },
-  tts: (message, channelId, author, callback) => {
+  tts: (message, channelId, author, queueId, callback) => {
     if (message) {
-      const sentence = gen.take(1);
+      let sentence = gen.take(1);
       let messageAuthor = message.author.username;
       message.delete(200);
-      return message.channel.send(sentence, { tts: true }).then(message => {
+      message.channel.send(sentence, { tts: true }).then(message => {
         message.edit("", {
           embed: {
             color: config.palette.yellow,
@@ -49,11 +49,14 @@ const sentence = {
           }
         });
       });
+      setTimeout(() => {
+        callback(null, { queueId: queueId });
+      }, 2000);
     }
 
     if (channelId && author) {
       const sentence = gen.take(1);
-      return client.channels
+      client.channels
         .get(channelId)
         .send(sentence, { tts: true })
         .then(message => {
@@ -65,6 +68,9 @@ const sentence = {
             }
           });
         });
+      setTimeout(() => {
+        callback(null, { queueId: queueId });
+      }, 2000);
     }
   }
 };

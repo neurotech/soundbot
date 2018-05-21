@@ -5,7 +5,7 @@ const library = require("../library");
 const rollbar = require("../rollbar-client");
 
 let sounds = {
-  play: (message, channelId, soundObject, callback) => {
+  play: (message, channelId, soundObject, queueId, callback) => {
     let voiceChannel = null;
     let sound = null;
     let file = null;
@@ -60,8 +60,11 @@ let sounds = {
           stream.on("end", end => {
             setTimeout(() => {
               if (message) message.delete(200);
-              if (message === null) return callback(null, soundObject);
-            }, 1000);
+              if (message === null)
+                return callback(null, {
+                  queueId: queueId
+                });
+            }, 2000);
           });
         })
         .catch(rollbar.error);
@@ -74,7 +77,7 @@ let sounds = {
       message.delete(200);
     }
   },
-  random: (message, id, callback) => {
+  random: (message, id, queueId, callback) => {
     let voiceChannel = null;
     if (message === null) {
       voiceChannel = client.channels.get(id);
@@ -121,8 +124,11 @@ let sounds = {
         stream.on("end", end => {
           setTimeout(() => {
             if (message) message.delete(200);
-            if (message === null) return callback(null, lastSoundPlayed);
-          }, 1000);
+            if (message === null)
+              return callback(null, {
+                queueId: queueId
+              });
+          }, 2000);
         });
       })
       .catch(rollbar.error);
