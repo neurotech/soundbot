@@ -13,8 +13,9 @@
   "scripts": {
     "watch": "watch --interval 1 \"node build.js\" src/",
     "start": "node app.js",
-    "predeploy": "node build.js",
-    "deploy": "now --public --local-config now.json && now alias --local-config now.json",
+    "predeploy": "set NODE_ENV=production&&node build.js",
+    "deploy":
+      "now --public --local-config now.json && now alias --local-config now.json",
     "clean": "now --local-config now.json rm soundbot --safe --yes"
   },
   "dependencies": {

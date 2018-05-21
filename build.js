@@ -35,7 +35,8 @@ log("success", "Compiled Sass to CSS.");
 
 // Browserify + Uglifyify JS
 let bundler = browserify(__dirname + "/src/index.js");
-bundler.transform("uglifyify", { global: true });
+if (process.env.NODE_ENV === "production")
+  bundler.transform("uglifyify", { global: true });
 bundler.bundle().pipe(fs.createWriteStream(__dirname + "/build/index.js"));
 log("success", "Uglified JS.");
 
@@ -59,8 +60,13 @@ fs
   .createReadStream("./node_modules/countup.js/dist/countUp.min.js")
   .pipe(fs.createWriteStream("./build/countUp.min.js"));
 fs
-  .createReadStream("./node_modules/socket.io-client/dist/socket.io.js")
-  .pipe(fs.createWriteStream("./build/socket.io.js"));
+  .createReadStream("./node_modules/socket.io-client/dist/socket.io.slim.js")
+  .pipe(fs.createWriteStream("./build/socket.io.slim.js"));
+fs
+  .createReadStream(
+    "./node_modules/socket.io-client/dist/socket.io.slim.js.map"
+  )
+  .pipe(fs.createWriteStream("./build/socket.io.slim.js.map"));
 log("success", "Built vendor CSS and JS.");
 
 // Fonts
