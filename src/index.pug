@@ -38,8 +38,13 @@ html(lang='en-AU')
                         button.btn.btn-sm.btn-secondary.ml-3(type="button" "v-on:click"="logoutUser()") Logout
 
           #container.container
+            transition(name="fade")
+              .alert.alert-danger.alert-dismissible(role="alert" v-if="state.errorMessage.status")
+                button.close(type="button" class="close" data-dismiss="alert" "v-on:click"="clearErrorMessage")
+                strong {{ state.errorMessage.status }}
+                p {{ state.errorMessage.result }}
             .row
-              .col-6
+              .col-7
                 #text
                   .card
                     .card-header
@@ -97,7 +102,7 @@ html(lang='en-AU')
                             strong Selected Sound:
                             div "{{ state.selectedSound.description }}"
 
-              .col-6
+              .col-5
                 #queue
                   .card
                     .card-header
@@ -113,15 +118,17 @@ html(lang='en-AU')
                         i.fe.fe-alert-triangle.ml-1.mr-2
                         | Can't connect to Soundbot!
                       .card-body.p-0
+                        #queue-header(class="row mx-0 py-2 align-items-center text-center" v-if="state.queue > 0")
+                          span.col-1.font-weight-bold #
+                          span.col-3.font-weight-bold Username
+                          span.col-4.font-weight-bold Action
+                          span.col.font-weight-bold Channel
+
                         transition-group(name="list-complete" tag="span")
-                          span#queue-row(v-for="(item, index) in queue" v-bind:key="item" class="row mx-0 py-2 align-items-center list-complete-item")
-                            span.col-1.text-center
-                              .font-weight-bold {{ index + 1 }}
-                            span.col
-                              .avatar(":style"="item.avatar")
+                          span#queue-row(v-for="(item, index) in queue" v-bind:key="item" class="row mx-0 py-2 align-items-center list-complete-item text-center")
+                            span.col-1 {{ index + 1 }}
+                            span.col-3.small {{ item.username }}
                             span.col-4
-                              .font-weight-bold {{ item.username }}
-                            span.col-3
                               .tag(":class"="item.tag") {{ item.action }}
                             span.col
                               code {{ item.destination }}
@@ -135,6 +142,8 @@ html(lang='en-AU')
                       span.input-icon-addon
                         i.fe.fe-search
                       input(type="text" v-model="state.libraryFilter" class="form-control" placeholder="Filter the Library")
+                .text-muted.text-center.py-6(v-if="library.length === 0") No sounds here.
+                .text-muted.text-center.py-6(v-if="filteredLibrary.length === 0") Can't find any sounds.
                 .table-responsive
                   table.table.card-table.table-striped.table-vcenter
                     tbody
