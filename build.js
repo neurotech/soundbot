@@ -39,6 +39,12 @@ bundler.transform("uglifyify", { global: true });
 bundler.bundle().pipe(fs.createWriteStream(__dirname + "/build/index.js"));
 log("success", "Uglified JS.");
 
+// Favicon
+fs
+  .createReadStream("./src/favicon.ico")
+  .pipe(fs.createWriteStream("./build/favicon.ico"));
+log("success", "Copied favicon.");
+
 // Vendor CSS, JS
 fs
   .createReadStream("./node_modules/tabler-ui/dist/assets/css/dashboard.css")
