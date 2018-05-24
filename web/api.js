@@ -9,16 +9,17 @@ let api = {
   web: {
     discord: {
       channels: function(request, response, tokens) {
-        let valid = false;
         if (request.headers.authorization) {
-          valid = validate(request.headers.authorization);
-        }
-
-        if (valid) {
-          var channels = db.get("discord.channels");
-          response.writeHead(200, { "Content-Type": "application/json" });
-          response.write(JSON.stringify(channels));
-          response.end();
+          validate(request.headers.authorization, (err, data) => {
+            if (err) log("error", err);
+            let valid = data;
+            if (valid) {
+              var channels = db.get("discord.channels");
+              response.writeHead(200, { "Content-Type": "application/json" });
+              response.write(JSON.stringify(channels));
+              response.end();
+            }
+          });
         } else {
           util.sendResponse(
             401,
@@ -31,18 +32,17 @@ let api = {
     },
     sounds: {
       list: function(request, response, tokens) {
-        let valid = false;
         if (request.headers.authorization) {
-          valid = validate(request.headers.authorization);
-        }
-
-        if (valid) {
-          let sounds = require("../sounds.json");
-          response.writeHead(200, {
-            "Content-Type": "application/json"
+          validate(request.headers.authorization, (err, data) => {
+            if (err) log("error", err);
+            let valid = data;
+            if (valid) {
+              let sounds = require("../sounds.json");
+              response.writeHead(200, { "Content-Type": "application/json" });
+              response.write(JSON.stringify(sounds));
+              response.end();
+            }
           });
-          response.write(JSON.stringify(sounds));
-          response.end();
         } else {
           util.sendResponse(
             401,
