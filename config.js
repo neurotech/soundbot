@@ -11,10 +11,14 @@ let config = {
       voice: process.env.SOUNDBOT_VOICE_BLACKLIST.split(",")
     }
   },
-  validTokens: process.env.SOUNDBOT_VALID_TOKENS,
+  aws: {
+    accessKeyId: process.env.SOUNDBOT_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.SOUNDBOT_AWS_ACCESS_KEY_SECRET
+  },
   rollbar: {
     serverToken: process.env.SOUNDBOT_ROLLBAR_SERVER_TOKEN
   },
+  validTokens: process.env.SOUNDBOT_VALID_TOKENS,
   admins: process.env.SOUNDBOT_ADMINS,
   soundlist: process.env.SOUNDBOT_SOUNDLISTURL,
   paths: {

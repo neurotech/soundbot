@@ -10,7 +10,9 @@
     "SOUNDBOT_GUILD_ID": "@soundbot-guild-id",
     "SOUNDBOT_TEXT_BLACKLIST": "@soundbot-text-blacklist",
     "SOUNDBOT_VOICE_BLACKLIST": "@soundbot-voice-blacklist",
-    "SOUNDBOT_ROLLBAR_SERVER_TOKEN": "@soundbot-rollbar-server-token"
+    "SOUNDBOT_ROLLBAR_SERVER_TOKEN": "@soundbot-rollbar-server-token",
+    "SOUNDBOT_AWS_ACCESS_KEY_ID": "@soundbot-aws-access-key-id",
+    "SOUNDBOT_AWS_ACCESS_KEY_SECRET": "@soundbot-aws-access-key-secret"
   },
   "scale": {
     "sfo1": {
