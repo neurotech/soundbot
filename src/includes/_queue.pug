@@ -1,0 +1,29 @@
+#queue
+  .card
+    .card-header
+      h3.card-title Queue
+      .card-options
+        span.tag Items in Queue:
+          span#queue-count.tag-addon.tag-orange.font-weight-bold {{state.queue}}
+    #queue-body
+      .card-alert.alert.alert-icon.alert-warning.mb-0(v-if="state.queue === 0")
+        i.fe.fe-loader.ml-1.mr-2
+        | The queue is empty, go hog wild!
+      .card-alert.alert.alert-icon.alert-danger.mb-0(v-if="socket.error")
+        i.fe.fe-alert-triangle.ml-1.mr-2
+        | Can't connect to Soundbot!
+      .card-body.p-0
+        #queue-header(class="row mx-0 py-2 align-items-center text-center" v-if="state.queue > 0")
+          span.col-1.font-weight-bold #
+          span.col-3.font-weight-bold Username
+          span.col-4.font-weight-bold Action
+          span.col.font-weight-bold Channel
+
+        transition-group(name="list-complete" tag="span")
+          span#queue-row(v-for="(item, index) in queue" v-bind:key="item" class="row mx-0 py-2 align-items-center list-complete-item text-center")
+            span.col-1 {{ index + 1 }}
+            span.col-3.small {{ item.username }}
+            span.col-4
+              .tag(":class"="item.tag") {{ item.action }}
+            span.col
+              code {{ item.destination }}

@@ -18,141 +18,19 @@ html(lang='en-AU')
     #app("v-cloak")
       .page
         #dashboard.page-main
-          .header.mb-5
-            .container
-              .d-flex
-                .header-brand Soundbot
-                .d-flex.order-lg-2.ml-auto
-                  .nav-item.d-none.d-md-flex.pr-0
-                    .leading-none.nav-link.pr-0
-                      span.ml-2.d-none.d-lg-block.text-right.pr-2
-                        span.text-default(v-if="user.username") {{ user.username }}
-                        small.text-muted.d-block.mt-1(v-if="user.discriminator") &#35;{{ user.discriminator }}
-                      #status-wrapper
-                        span.avatar(":style"="avatarImage")
-                        span#status-icon("v-bind:class"="{ 'status-connected' : state.socket === 'connected', 'status-connecting' : state.socket === 'connecting', 'status-disconnected' : state.socket === 'disconnected' }" v-if="user.username")
-
-                      a(href="/auth/discord" v-if="!token")
-                        button.btn.btn-sm.btn-secondary.ml-3(type="button") Login
-                      a(href="#" v-if="token")
-                        button.btn.btn-sm.btn-secondary.ml-3(type="button" "v-on:click"="logoutUser()") Logout
+          include includes/_header.pug
 
           #container.container
-            transition(name="fade")
-              .alert.alert-danger.alert-dismissible(role="alert" v-if="state.errorMessage.status")
-                button.close(type="button" class="close" data-dismiss="alert" "v-on:click"="clearErrorMessage")
-                strong {{ state.errorMessage.status }}
-                p {{ state.errorMessage.result }}
+            include includes/_error.pug
+
             .row
               .col-7
-                #text
-                  .card
-                    .card-header
-                      h3.card-title.text-bold Text
-                    .card-body
-                      .row
-                        .col-6
-                          select.custom-select(v-model="state.selectedTextChannel")
-                            option(v-for="channel in channels.text" "v-bind:value"="channel.id") &#x1F535; {{ channel.name }}
-                        .col-6
-                          .btn-list
-                            button(type="button" class="btn btn-block btn-azure btn-primary" "v-on:click"="ttsSentence")
-                              i.fe.fe-mic.mr-2
-                              | Send a TTS Sentence
-                            button(type="button" class="btn btn-block btn-green btn-primary" "v-on:click"="textSentence")
-                              i.fe.fe-book-open.mr-2
-                              | Send a Text Sentence
-
-                #voice
-                  .card
-                    .card-header
-                      h3.card-title Voice
-                      .card-options
-                        label.custom-switch.m-0
-                          span.mr-3.tag.tag-rounded("v-bind:class"="{ 'tag-blue' : state.isRandomSoundSelected, 'badge-light' : !state.isRandomSoundSelected }") Random Sound
-                          input(type="checkbox" class="custom-switch-input" v-model="state.isRandomSoundSelected")
-                          span(class="custom-switch-indicator")
-                    .card-body
-                      .row
-                        .col-6
-                          select(v-model="state.selectedVoiceChannel").custom-select
-                            option(v-for="channel in channels.voice" "v-bind:value"="channel.id") &#x1F4E2; {{ channel.name }}
-                        .col-6
-                          button(type="button" class="btn btn-indigo btn-primary btn-block" v-if="state.isRandomSoundSelected" "v-on:click"="playRandomSound")
-                            i.fe.fe-music.mr-2
-                            | Play a Random Sound
-
-                          button.btn.btn-primary.btn-block(
-                            type="button"
-                            v-if="!state.isRandomSoundSelected"
-                            "v-on:click"="playSound"
-                            "v-bind:class"="{ 'btn-secondary' : !state.selectedSound.id, 'btn-pink' : state.selectedSound.id }"
-                            "v-bind:disabled"="!state.selectedSound.id"
-                          )
-                            span(v-if="!state.selectedSound.id")
-                              i.fe.fe-chevrons-down.mr-2
-                              | Select a sound from the library
-                            span(v-else)
-                              i.fe.fe-music.mr-2
-                              | Play Sound
-                      .row
-                        #sound-info.col.mt-4(v-if="!state.isRandomSoundSelected")
-                          #nosound(v-if="!state.selectedSound.id") No sound selected!
-                          #soundselected(v-if="state.selectedSound.id")
-                            strong Selected Sound:
-                            div "{{ state.selectedSound.description }}"
+                include includes/_text-commands.pug
+                include includes/_voice-commands.pug
 
               .col-5
-                #queue
-                  .card
-                    .card-header
-                      h3.card-title Queue
-                      .card-options
-                        span.tag Items in Queue:
-                          span#queue-count.tag-addon.tag-orange.font-weight-bold {{state.queue}}
-                    #queue-body
-                      .card-alert.alert.alert-icon.alert-warning.mb-0(v-if="state.queue === 0")
-                        i.fe.fe-loader.ml-1.mr-2
-                        | The queue is empty, go hog wild!
-                      .card-alert.alert.alert-icon.alert-danger.mb-0(v-if="socket.error")
-                        i.fe.fe-alert-triangle.ml-1.mr-2
-                        | Can't connect to Soundbot!
-                      .card-body.p-0
-                        #queue-header(class="row mx-0 py-2 align-items-center text-center" v-if="state.queue > 0")
-                          span.col-1.font-weight-bold #
-                          span.col-3.font-weight-bold Username
-                          span.col-4.font-weight-bold Action
-                          span.col.font-weight-bold Channel
+                include includes/_queue.pug
 
-                        transition-group(name="list-complete" tag="span")
-                          span#queue-row(v-for="(item, index) in queue" v-bind:key="item" class="row mx-0 py-2 align-items-center list-complete-item text-center")
-                            span.col-1 {{ index + 1 }}
-                            span.col-3.small {{ item.username }}
-                            span.col-4
-                              .tag(":class"="item.tag") {{ item.action }}
-                            span.col
-                              code {{ item.destination }}
-
-            #sounds(v-if="!state.isRandomSoundSelected")
-              .card
-                .card-header
-                  h3.card-title.text-bold Sound Library
-                  .card-options
-                    .input-icon
-                      span.input-icon-addon
-                        i.fe.fe-search
-                      input(type="text" v-model="state.libraryFilter" class="form-control" placeholder="Filter the Library")
-                .text-muted.text-center.py-6(v-if="library.length === 0") No sounds here.
-                .text-muted.text-center.py-6(v-if="filteredLibrary.length === 0") Can't find any sounds.
-                .table-responsive
-                  table.table.card-table.table-striped.table-vcenter
-                    tbody
-                      tr(v-for="sound in filteredLibrary")
-                        td.w-1
-                          a(href="#")
-                            button.btn.btn-sm.btn-green.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound;")
-                              i.fe.fe-arrow-up.mr-2
-                              | Select
-                        td.col {{ sound.description }}
+            include includes/_sounds.pug
 
   script(src='index.js')
