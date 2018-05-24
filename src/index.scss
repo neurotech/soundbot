@@ -5,6 +5,20 @@
 .btn-primary:disabled {
   cursor: not-allowed;
 }
+#login {
+  font-size: 1.2rem;
+}
+#discord-button {
+  color: #fff;
+  background-color: #7289da;
+  border-color: #7289da;
+  &:hover {
+    color: #fff;
+    background-color: #6175be;
+    border-color: #5568aa;
+    text-decoration: none;
+  }
+}
 .avatar {
   background-color: white !important;
 }

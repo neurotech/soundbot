@@ -1,0 +1,26 @@
+doctype
+html(lang='en-AU')
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Soundbot - Login
+    link(rel="shortcut icon" type="image/x-icon" href="favicon.ico")
+    link(rel="icon" type="image/x-icon" href="favicon.ico")
+    link(rel='stylesheet', href='normalise.css')
+    link(rel='stylesheet', href='index.css')
+    link(rel='stylesheet', href='dashboard.css')
+
+  body
+    #app.page
+        #login.page-single
+          #container.container
+            .row
+              .col.col-login.mx-auto
+                .card
+                  .card-body.p-6
+                    p#login.mb-6.text-center Soundbot requires you to login with your Discord account.
+                    .text-center
+                      a#discord-button.btn.btn-lg.btn-block(href="/auth/discord")
+                        i.fe.fe-lock.mr-2
+                        | Authorise with Discord

@@ -12,22 +12,27 @@ const log = require("../log");
 const api = require("./api");
 const commands = require("./commands");
 
+let mimeTypes = {
+  ".css": "text/css",
+  ".js": "application/javascript",
+  ".map": "application/octet-stream",
+  ".svg": "image/svg+xml",
+  ".gif": "image/gif",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".ico": "image/x-icon",
+  ".woff": "font/woff"
+};
+
 seaLion.add({
   "/": {
     GET: dion.serveFile("./build/index.html", "text/html")
   },
+  "/login": {
+    GET: dion.serveFile("./build/login/index.html", "text/html")
+  },
   "/`path...`": {
-    GET: dion.serveDirectory("./build", {
-      ".css": "text/css",
-      ".js": "application/javascript",
-      ".map": "application/octet-stream",
-      ".svg": "image/svg+xml",
-      ".gif": "image/gif",
-      ".png": "image/png",
-      ".jpg": "image/jpeg",
-      ".ico": "image/x-icon",
-      ".woff": "font/woff"
-    })
+    GET: dion.serveDirectory("./build", mimeTypes)
   },
   "/api/discord/channels": {
     GET: api.web.discord.channels

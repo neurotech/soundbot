@@ -5,7 +5,7 @@ const sass = require("node-sass");
 const browserify = require("browserify");
 const log = require("./log");
 
-let buildDir = "./build";
+let buildDir = "./build/login";
 let fontsDir = "./build/fonts/feather";
 
 // Prepare the ./build directory and subdirectories
@@ -16,6 +16,11 @@ if (!fs.existsSync(fontsDir)) mkdirp.sync(fontsDir);
 fs.writeFileSync(
   "./build/index.html",
   pug.renderFile("./src/index.pug"),
+  "utf8"
+);
+fs.writeFileSync(
+  "./build/login/index.html",
+  pug.renderFile("./src/login/index.pug"),
   "utf8"
 );
 log("success", "Compiled pug to HTML.");
