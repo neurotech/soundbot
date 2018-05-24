@@ -1,0 +1,21 @@
+#sounds(v-if="!state.isRandomSoundSelected")
+  .card
+    .card-header
+      h3.card-title.text-bold Sound Library
+      .card-options
+        .input-icon
+          span.input-icon-addon
+            i.fe.fe-search
+          input(type="text" v-model="state.libraryFilter" class="form-control" placeholder="Filter the Library")
+    .text-muted.text-center.py-6(v-if="library.length === 0") No sounds here.
+    .text-muted.text-center.py-6(v-if="filteredLibrary.length === 0") Can't find any sounds.
+    .table-responsive
+      table.table.card-table.table-striped.table-vcenter
+        tbody
+          tr(v-for="sound in filteredLibrary")
+            td.w-1
+              a(href="#")
+                button.btn.btn-sm.btn-green.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound;")
+                  i.fe.fe-arrow-up.mr-2
+                  | Select
+            td.col {{ sound.description }}
