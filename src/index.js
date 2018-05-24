@@ -7,7 +7,7 @@ if (urlToken) {
 
 const authState = sessionStorage.getItem("discordToken");
 if (!authState) {
-  window.location.replace("/auth/discord");
+  window.location.replace("/login");
 } else {
   const cpjax = require("cpjax");
 
