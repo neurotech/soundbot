@@ -4,6 +4,7 @@ const Dion = require("dion");
 const seaLion = new SeaLion();
 const dion = new Dion(seaLion);
 const authom = require("authom");
+const validate = require("./auth/validate");
 
 const config = require("../config");
 const db = require("../db");
@@ -76,9 +77,23 @@ let server = http.createServer(seaLion.createHandler());
 let io = require("socket.io")(server);
 let queue = require("../action-queue").context(io);
 
-io.on("connection", function(socket) {
-  socket.emit("queue:populate", queueState);
-});
+io
+  .use(function(socket, next) {
+    if (socket.handshake.query && socket.handshake.query.token) {
+      let authString = `socket.io|${socket.handshake.query.token}`;
+      validate(authString, (err, valid) => {
+        if (err) return next(new Error("Unauthorized."));
+        if (valid) {
+          return next();
+        } else {
+          return next(new Error("Unauthorized."));
+        }
+      });
+    }
+  })
+  .on("connection", function(socket) {
+    socket.emit("queue:populate", queueState);
+  });
 
 module.exports = {
   start: () => {

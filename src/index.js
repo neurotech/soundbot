@@ -12,7 +12,7 @@ if (!authState) {
   const cpjax = require("cpjax");
 
   // socket.io
-  const socket = io();
+  const socket = io({ query: { token: authState } });
 
   // Data
   socket.on("queue:populate", function(queue) {
@@ -50,6 +50,9 @@ if (!authState) {
   });
   socket.on("reconnect_attempt", function() {
     app.state.socket = "connecting";
+    socket.io.opts.query = {
+      token: authState
+    };
   });
 
   Vue.config.devtools = true;
