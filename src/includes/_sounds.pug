@@ -19,7 +19,7 @@
                   i.fe.fe-arrow-up.mr-2
                   | Select
             td.w-1
-              button.btn.btn-sm.btn-pink.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound; playSound();" "v-bind:disabled"="sound.timeLeft > 0")
+              button.btn.btn-sm.btn-pink.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound; playSound(); sound.lastPlayed = new Date(); sound.timeLeft = 60;" "v-bind:disabled"="sound.timeLeft > 0")
                 i.fe.fe-arrow-right.mr-2
                 | Select &amp; Queue
             td.col {{ sound.description }}
