@@ -180,23 +180,6 @@ if (!authState) {
           }
         );
       },
-      getLibrary: function() {
-        var self = this;
-        cpjax(
-          {
-            url: "/api/sounds/list",
-            auth: `${self.user.username}#${self.user.discriminator}|${
-              self.token
-            }`,
-            requestedWith: false
-          },
-          (err, data) => {
-            if (err) return self.errorHandler(err);
-            let parsed = JSON.parse(data);
-            self.library = parsed;
-          }
-        );
-      },
       getUserDetails: function(discordToken) {
         var self = this;
         if (discordToken.length > 0) {
@@ -210,7 +193,6 @@ if (!authState) {
               if (err) return self.errorHandler(err);
               self.user = JSON.parse(data);
               this.getChannels();
-              this.getLibrary();
             }
           );
         }
