@@ -13,15 +13,16 @@
       table.table.card-table.table-striped.table-vcenter
         tbody
           tr(v-for="sound in filteredLibrary")
-            td.w-1
+            td.w-1("v-bind:class"="{ 'sound-disabled' : checkTimeLeft(sound.timeLeft), 'sound-enabled' : !checkTimeLeft(sound.timeLeft) }")
               a(href="#")
-                button.btn.btn-sm.btn-orange.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound;")
+                button.btn.btn-sm.btn-orange.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound;" "v-bind:disabled"="checkTimeLeft(sound.timeLeft)")
                   i.fe.fe-arrow-up.mr-2
                   | Select
-            td.w-1
-              button.btn.btn-sm.btn-pink.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound; playSound(); sound.lastPlayed = new Date(); sound.timeLeft = 60;" "v-bind:disabled"="sound.timeLeft > 0")
+            td.w-1("v-bind:class"="{ 'sound-disabled' : checkTimeLeft(sound.timeLeft), 'sound-enabled' : !checkTimeLeft(sound.timeLeft) }")
+              button.btn.btn-sm.btn-pink.btn-block.float-right.ml-2(type="button" "v-on:click"="state.selectedSound = sound; playSound();" "v-bind:disabled"="checkTimeLeft(sound.timeLeft)")
                 i.fe.fe-arrow-right.mr-2
                 | Select &amp; Queue
-            td.col {{ sound.description }}
+            td.col("v-bind:class"="{ 'sound-disabled' : checkTimeLeft(sound.timeLeft), 'sound-enabled' : !checkTimeLeft(sound.timeLeft) }") {{ sound.description }}
             td.col-3
-              .tag(v-if="sound.timeLeft") {{ sound.timeLeft }}
+              .tag(v-if="checkTimeLeft(sound.timeLeft)") Cooldown:
+                span.tag-addon.font-weight-bold {{ sound.timeLeft }}
