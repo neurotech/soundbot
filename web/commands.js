@@ -69,7 +69,6 @@ let commands = {
                   queue.add(
                     function(cb) {
                       sounds.play(
-                        null,
                         channelId,
                         soundObject,
                         queueId,
@@ -142,7 +141,7 @@ let commands = {
                   let queueId = crypto.randomBytes(16).toString("hex");
                   queue.add(
                     function(cb) {
-                      sounds.random(null, channelId, queueId, (err, result) => {
+                      sounds.random(channelId, queueId, (err, result) => {
                         if (err) util.sendResponse(400, "ERROR", err, response);
                         util.sendResponse(200, "OK", result, response);
                         cb(null, result);
@@ -211,7 +210,6 @@ let commands = {
                   queue.add(
                     function(cb) {
                       sentence.sentence(
-                        null,
                         channelId,
                         author,
                         queueId,
@@ -285,7 +283,6 @@ let commands = {
                   queue.add(
                     function(cb) {
                       sentence.tts(
-                        null,
                         channelId,
                         author,
                         queueId,
