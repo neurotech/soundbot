@@ -38,9 +38,6 @@ seaLion.add({
   "/api/discord/channels": {
     GET: api.web.discord.channels
   },
-  "/api/sounds/list": {
-    GET: api.web.sounds.list
-  },
   "/command/randomsound/`channelId`": {
     POST: commands.sound.random
   },
