@@ -5,9 +5,15 @@ const discord = require("./discord/discord-api");
 module.exports = callback => {
   db.defaults(config.db.defaults).write();
 
-  // Add valid tokens to db
-  let validtokens = config.validTokens.split("|");
-  db.set("tokens", validtokens).write();
+  // Add sounds to library
+  let data = require("./sounds.json");
+  let sounds = [];
+  data.forEach(sound => {
+    sound.lastPlayed = null;
+    sound.timeLeft = null;
+    sounds.push(sound);
+  });
+  db.set("library", sounds).write();
 
   // Get list of channnels from Discord API
   discord.getChannels((err, channels) => {
