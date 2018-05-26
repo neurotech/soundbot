@@ -226,7 +226,7 @@ let commands = {
                       queueId: queueId,
                       username: author,
                       action: "Text Sentence",
-                      tag: "tag-azure",
+                      tag: "tag-green",
                       destination: "🔵 " + isValidChannelId.name
                     }
                   );
@@ -299,7 +299,7 @@ let commands = {
                       queueId: queueId,
                       username: author,
                       action: "TTS Sentence",
-                      tag: "tag-green",
+                      tag: "tag-azure",
                       destination: "🔵 " + isValidChannelId.name
                     }
                   );

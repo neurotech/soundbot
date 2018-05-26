@@ -13,7 +13,7 @@
           select(v-model="state.selectedVoiceChannel").custom-select
             option(v-for="channel in channels.voice" "v-bind:value"="channel.id") &#x1F4E2; {{ channel.name }}
         .col-6
-          button(type="button" class="btn btn-indigo btn-primary btn-block" v-if="state.isRandomSoundSelected" "v-on:click"="playRandomSound")
+          button(type="button" class="btn btn-indigo btn-primary btn-block" v-if="state.isRandomSoundSelected" "v-on:click"="playRandomSound" "v-bind:disabled"="globalCoolDown >= 10")
             i.fe.fe-music.mr-2
             | Play a Random Sound
 

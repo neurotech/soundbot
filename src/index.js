@@ -30,6 +30,9 @@ if (!authState) {
       );
     }
   });
+  socket.on("gcd:populate", function(gcd) {
+    app.globalCoolDown = gcd;
+  });
   socket.on("queue:add-item", function(item) {
     app.queue.push(item);
   });
@@ -51,6 +54,9 @@ if (!authState) {
 
     app.$set(app.library[soundLocation], "lastPlayed", new Date());
     app.$set(app.library[soundLocation], "timeLeft", 60);
+  });
+  socket.on("gcd:update", function(gcd) {
+    app.globalCoolDown = gcd;
   });
 
   // State
@@ -99,7 +105,8 @@ if (!authState) {
         error: false
       },
       queue: [],
-      library: []
+      library: [],
+      globalCoolDown: 0
     },
     computed: {
       filteredLibrary() {
@@ -122,6 +129,14 @@ if (!authState) {
               this.user.id
             }/${this.user.avatar}.png`
           };
+      },
+      progressColour() {
+        return {
+          "bg-green": this.globalCoolDown >= 0 && this.globalCoolDown < 3,
+          "bg-yellow": this.globalCoolDown >= 3 && this.globalCoolDown < 6,
+          "bg-orange": this.globalCoolDown >= 6 && this.globalCoolDown < 8,
+          "bg-red": this.globalCoolDown >= 8 && this.globalCoolDown <= 10
+        };
       }
     },
     watch: {

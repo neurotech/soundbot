@@ -37,6 +37,7 @@ let config = {
       queue: {
         items: []
       },
+      globalCoolDown: 0,
       state: {
         dnd: 0
       }
