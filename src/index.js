@@ -288,6 +288,9 @@ if (!authState) {
             self.$set(this.library[index], "timeLeft", remain > 0 ? remain : 0);
           }
         });
+      },
+      checkTimeLeft: function(time) {
+        return time < 60 && time > 0;
       }
     },
     mounted: function() {
