@@ -38,7 +38,7 @@ setup((err, results) => {
     // When ready, set currently playing game to help message
     client.on("ready", () => {
       client.user
-        .setActivity("for a command from .list", {
+        .setActivity("https://soundbot.now.sh", {
           type: "WATCHING"
         })
         .then(presence => log("success", "Soundbot online."))
