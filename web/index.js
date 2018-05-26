@@ -89,7 +89,10 @@ io
   })
   .on("connection", function(socket) {
     let queueState = db.get("queue.items").value();
-    let libraryState = db.get("library").value();
+    let libraryState = db
+      .get("library")
+      .sortBy("id")
+      .value();
     let gcdState = db.get("globalCoolDown").value();
     socket.emit("queue:populate", queueState);
     socket.emit("library:populate", libraryState);
