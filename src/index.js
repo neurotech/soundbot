@@ -22,6 +22,14 @@ if (!authState) {
       console.log(`🤖 -- Queue populated with ${queue.length} item(s).`);
     }
   });
+  socket.on("library:populate", function(sounds) {
+    if (sounds.length > 0) {
+      app.library = sounds;
+      console.log(
+        `🤖 -- Sound library populated with ${sounds.length} sounds(s).`
+      );
+    }
+  });
   socket.on("queue:add-item", function(item) {
     app.queue.push(item);
   });
