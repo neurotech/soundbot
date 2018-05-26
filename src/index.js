@@ -42,6 +42,16 @@ if (!authState) {
 
     app.queue.splice(itemLocation, 1);
   });
+  socket.on("library:cooldown-update", function(id) {
+    let soundLocation = app.library
+      .map(function(e) {
+        return e.id;
+      })
+      .indexOf(id);
+
+    app.$set(app.library[soundLocation], "lastPlayed", new Date());
+    app.$set(app.library[soundLocation], "timeLeft", 60);
+  });
 
   // State
   socket.on("connect", function() {
