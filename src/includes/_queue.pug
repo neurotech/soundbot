@@ -20,7 +20,7 @@
           span.col.font-weight-bold Channel
 
         transition-group(name="list-complete" tag="span")
-          span#queue-row(v-for="(item, index) in queue" v-bind:key="item" class="row mx-0 py-2 align-items-center list-complete-item text-center")
+          span#queue-row(v-for="(item, index) in queue" v-bind:key="item.queueId" class="row mx-0 py-2 align-items-center list-complete-item text-center")
             span.col-1 {{ index + 1 }}
             span.col-3.small {{ item.username }}
             span.col-4
