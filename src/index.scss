@@ -95,6 +95,9 @@
 .sound-disabled button {
   cursor: not-allowed;
 }
+#gcd {
+  transition: all 0.75s;
+}
 .list-complete-item {
   transition: all 0.45s;
 }
