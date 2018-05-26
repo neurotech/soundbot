@@ -276,12 +276,8 @@ if (!authState) {
       },
       refreshCooldowns: function() {
         var self = this;
-        // Make a smaller array that just contains elements
-        // that have timeLeft > 0
-        // then remove if (element && element.timeLeft <= 60)
-        // etc
         self.library.forEach((element, index) => {
-          if (element && element.timeLeft <= 60) {
+          if (element && element.timeLeft > 0) {
             // https://stackoverflow.com/a/15437397
             let now = new Date();
             let lastPlayed = new Date(element.lastPlayed);
@@ -289,13 +285,7 @@ if (!authState) {
             let seconds = Math.round(diff * 0.001);
             let remain = 60 - seconds;
 
-            self.$set(this.library, index, {
-              id: element.id,
-              file: element.file,
-              description: element.description,
-              lastPlayed: element.lastPlayed,
-              timeLeft: remain > 0 ? remain : 0
-            });
+            self.$set(this.library[index], "timeLeft", remain > 0 ? remain : 0);
           }
         });
       }
@@ -303,7 +293,7 @@ if (!authState) {
     mounted: function() {
       this.updateLibrary = setInterval(this.getLibrary, 1000 * 60 * 10);
       this.updateChannels = setInterval(this.getChannels, 1000 * 60 * 10);
-      this.updateCooldowns = setInterval(this.refreshCooldowns, 1000 * 3);
+      this.updateCooldowns = setInterval(this.refreshCooldowns, 1000);
     },
     beforeDestroy: function() {
       clearInterval(this.updateLibrary);
