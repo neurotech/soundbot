@@ -22,6 +22,14 @@ if (!authState) {
       console.log(`🤖 -- Queue populated with ${queue.length} item(s).`);
     }
   });
+  socket.on("library:populate", function(sounds) {
+    if (sounds.length > 0) {
+      app.library = sounds;
+      console.log(
+        `🤖 -- Sound library populated with ${sounds.length} sounds(s).`
+      );
+    }
+  });
   socket.on("queue:add-item", function(item) {
     app.queue.push(item);
   });
@@ -33,6 +41,16 @@ if (!authState) {
       .indexOf(item.queueId);
 
     app.queue.splice(itemLocation, 1);
+  });
+  socket.on("library:cooldown-update", function(id) {
+    let soundLocation = app.library
+      .map(function(e) {
+        return e.id;
+      })
+      .indexOf(id);
+
+    app.$set(app.library[soundLocation], "lastPlayed", new Date());
+    app.$set(app.library[soundLocation], "timeLeft", 60);
   });
 
   // State
@@ -162,23 +180,6 @@ if (!authState) {
           }
         );
       },
-      getLibrary: function() {
-        var self = this;
-        cpjax(
-          {
-            url: "/api/sounds/list",
-            auth: `${self.user.username}#${self.user.discriminator}|${
-              self.token
-            }`,
-            requestedWith: false
-          },
-          (err, data) => {
-            if (err) return self.errorHandler(err);
-            let parsed = JSON.parse(data);
-            self.library = parsed;
-          }
-        );
-      },
       getUserDetails: function(discordToken) {
         var self = this;
         if (discordToken.length > 0) {
@@ -192,7 +193,6 @@ if (!authState) {
               if (err) return self.errorHandler(err);
               self.user = JSON.parse(data);
               this.getChannels();
-              this.getLibrary();
             }
           );
         }
@@ -273,15 +273,35 @@ if (!authState) {
             if (err) return self.errorHandler(err);
           }
         );
+      },
+      refreshCooldowns: function() {
+        var self = this;
+        self.library.forEach((element, index) => {
+          if (element && element.timeLeft > 0) {
+            // https://stackoverflow.com/a/15437397
+            let now = new Date();
+            let lastPlayed = new Date(element.lastPlayed);
+            let diff = now.getTime() - lastPlayed.getTime();
+            let seconds = Math.round(diff * 0.001);
+            let remain = 60 - seconds;
+
+            self.$set(this.library[index], "timeLeft", remain > 0 ? remain : 0);
+          }
+        });
+      },
+      checkTimeLeft: function(time) {
+        return time < 60 && time > 0;
       }
     },
     mounted: function() {
       this.updateLibrary = setInterval(this.getLibrary, 1000 * 60 * 10);
       this.updateChannels = setInterval(this.getChannels, 1000 * 60 * 10);
+      this.updateCooldowns = setInterval(this.refreshCooldowns, 1000);
     },
     beforeDestroy: function() {
       clearInterval(this.updateLibrary);
       clearInterval(this.updateChannels);
+      clearInterval(this.updateCooldowns);
     }
   });
 

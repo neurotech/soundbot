@@ -38,9 +38,6 @@ seaLion.add({
   "/api/discord/channels": {
     GET: api.web.discord.channels
   },
-  "/api/sounds/list": {
-    GET: api.web.sounds.list
-  },
   "/command/randomsound/`channelId`": {
     POST: commands.sound.random
   },
@@ -72,7 +69,6 @@ authom.on("auth", function(req, res, data) {
 });
 
 let port = 4567;
-let queueState = db.get("queue.items").value() || 0;
 let server = http.createServer(seaLion.createHandler());
 let io = require("socket.io")(server);
 let queue = require("../action-queue").context(io);
@@ -92,7 +88,10 @@ io
     }
   })
   .on("connection", function(socket) {
+    let queueState = db.get("queue.items").value();
+    let libraryState = db.get("library").value();
     socket.emit("queue:populate", queueState);
+    socket.emit("library:populate", libraryState);
   });
 
 module.exports = {

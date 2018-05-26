@@ -84,6 +84,7 @@ let commands = {
                     {
                       queueId: queueId,
                       username: soundObject.author,
+                      soundId: soundObject.id,
                       action: "Sound",
                       tag: "tag-pink",
                       destination: "📢 " + isValidChannelId.name

@@ -33,6 +33,7 @@ let config = {
         }
       },
       tokens: [],
+      library: [],
       queue: {
         items: []
       },

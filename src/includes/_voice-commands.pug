@@ -22,7 +22,7 @@
             v-if="!state.isRandomSoundSelected"
             "v-on:click"="playSound"
             "v-bind:class"="{ 'btn-secondary' : !state.selectedSound.id, 'btn-pink' : state.selectedSound.id }"
-            "v-bind:disabled"="!state.selectedSound.id"
+            "v-bind:disabled"="!state.selectedSound.id || checkTimeLeft(state.selectedSound.timeLeft)"
           )
             span(v-if="!state.selectedSound.id")
               i.fe.fe-chevrons-down.mr-2

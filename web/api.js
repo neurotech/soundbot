@@ -29,29 +29,6 @@ let api = {
           );
         }
       }
-    },
-    sounds: {
-      list: function(request, response, tokens) {
-        if (request.headers.authorization) {
-          validate(request.headers.authorization, (err, data) => {
-            if (err) log("error", err);
-            let valid = data;
-            if (valid) {
-              let sounds = require("../sounds.json");
-              response.writeHead(200, { "Content-Type": "application/json" });
-              response.write(JSON.stringify(sounds));
-              response.end();
-            }
-          });
-        } else {
-          util.sendResponse(
-            401,
-            "Unauthorized",
-            "You are not authorized to perform this action.",
-            response
-          );
-        }
-      }
     }
   }
 };
