@@ -2,6 +2,8 @@ const symbols = require("log-symbols");
 const spacetime = require("spacetime");
 const rollbar = require("./rollbar-client");
 
+let timestampFormat = "dd-MM-yyyy hh:mm a";
+
 module.exports = (symbol, message) => {
   var s = spacetime.now();
   var symbolChar = null;
@@ -32,7 +34,7 @@ module.exports = (symbol, message) => {
 
   let logMessage = `[${s
     .goto("Australia/Sydney")
-    .format("nice-day")}] ${symbolChar} ${message}`;
+    .format(timestampFormat)}] ${symbolChar} ${message}`;
 
   if (symbol === "error") {
     console.error(logMessage);

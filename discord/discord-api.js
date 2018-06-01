@@ -4,6 +4,8 @@ const client = require("./discord-client");
 const config = require("../config");
 const db = require("../db");
 
+let timestampFormat = "dd-MM-yyyy hh:mm a";
+
 module.exports = {
   getChannels: callback => {
     var url = `https://discordapp.com/api/guilds/${
@@ -37,7 +39,7 @@ module.exports = {
 let processChannelList = json => {
   var now = spacetime.now();
   var channels = {
-    freshness: now.goto("Australia/Sydney").format("nice-day"),
+    freshness: now.goto("Australia/Sydney").format(timestampFormat),
     text: [],
     voice: []
   };
