@@ -1,6 +1,6 @@
 {
   "name": "soundbot",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Soundboard bot for Discord",
   "main": "app.js",
   "author": "Tim Douglas",
