@@ -47,8 +47,8 @@ log("success", "Uglified JS.");
 
 // Favicon
 fs
-  .createReadStream("./src/favicon.ico")
-  .pipe(fs.createWriteStream("./build/favicon.ico"));
+  .createReadStream("./src/favicon.png")
+  .pipe(fs.createWriteStream("./build/favicon.png"));
 log("success", "Copied favicon.");
 
 // Vendor CSS, JS
