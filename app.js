@@ -1,38 +1,85 @@
-const Discord = require('discord.js');
-const symbols = require('log-symbols');
-const dateFormat = require('dateformat');
-const config = require('./config');
-const router = require('./commands/router');
-const client = new Discord.Client();
+const log = require("./log");
+const config = require("./config");
+const db = require("./db");
+const setup = require("./setup");
+const web = require("./web");
+const tasks = require("./tasks");
+const client = require("./discord/discord-client");
+const router = require("./commands/router");
 
-client.login(config.discord.token);
+db.defaults(config.db.defaults).write();
+setup((err, results) => {
+  if (err) {
+    log("error", err);
+  } else {
+    log(
+      "info",
+      `DND Mode is ${db.get("state.dnd").value() === 0 ? "off" : "on"}.`
+    );
+    log(
+      "success",
+      `DB seeded with ${results.text.length} text and ${
+        results.voice.length
+      } voice channels.`
+    );
 
-// When ready, set currently playing game to help message
-client.on('ready', () => {
-  client.user.setGame('Type .list for help');
-  console.log(symbols.success, ` [${dateFormat()}] Soundbot online.`);
-});
+    // Start the web server
+    web.start();
 
-// Watch for message
-client.on('message', message => {
-  // Ignore DMs and only respond to messages from text channels.
-  if (message.channel.type !== 'text') { return; }
+    // Schedule recurring tasks
+    tasks.schedule((err, tasks) => {
+      if (err) {
+        log("error", err);
+      } else {
+        log("success", `Scheduled ${tasks} tasks.`);
+      }
+    });
 
-  // Send message to router
-  router(message);
-});
+    // When ready, set currently playing game to help message
+    client.on("ready", () => {
+      client.user
+        .setActivity("https://soundbot.now.sh", {
+          type: "WATCHING"
+        })
+        .then(presence => log("success", "Soundbot online."))
+        .catch(err => log("error", error.message));
+    });
 
-// Re-login if client goes offline
-setInterval(() => {
-  if (client.status === 1) {
-    console.log(symbols.error, ` [${dateFormat()}] Soundbot lost connection to Discord!`);
-    client.login(config.discord.token)
-      .then(() => {
-        console.log(symbols.success, ` [${dateFormat()}] Soundbot re-connected to Discord.`);
-      });
+    // Watch for messages
+    client.on("message", message => {
+      // Ignore DMs and only respond to messages from text channels.
+      if (message.channel.type !== "text") return;
+
+      // Send the message to router
+      router(message);
+    });
+
+    // Try to re-login if client goes offline
+    setInterval(() => {
+      if (client.status === 1) {
+        log("warning", "Soundbot lost connection to Discord!");
+        client.login(config.discord.token).then(() => {
+          log("success", "Soundbot re-connected to Discord.");
+        });
+      }
+    }, 1000 * 30);
   }
-}, 1000 * 30);
+});
 
-// Log out on process exit/uncaught exception
-process.on('exit', () => { client.destroy(); });
-process.on('uncaughtException', () => { client.destroy(); });
+// Log out on process exit/uncaught exception/unhandled rejection
+process.on("exit", () => {
+  client.destroy();
+  log("error", "Shutting down Soundbot.");
+});
+process.on("uncaughtException", err => {
+  client.destroy();
+  log("error", `Uncaught exception!`);
+  if (err.code) log("error", err.code);
+  if (err.message) log("error", err.message);
+  log("error", err.stack);
+  process.exit(1);
+});
+process.on("unhandledRejection", (reason, p) => {
+  client.destroy();
+  log("error", `Unhandled Rejection: ${reason.stack}`);
+});

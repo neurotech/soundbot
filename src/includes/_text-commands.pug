@@ -1,0 +1,20 @@
+#text
+  .card
+    .card-header
+      h3.card-title.text-bold Text
+    .card-body
+      .row
+        .col-6
+          select.custom-select(v-model="state.selectedTextChannel")
+            option(v-for="channel in channels.text" "v-bind:value"="channel.id") &#x1F535; {{ channel.name }}
+          .text-muted.mt-2 Global Cooldown
+          .progress.mt-2(style="height: 1rem;")
+            #gcd.progress-bar("v-bind:class"="progressColour" "v-bind:style"="{ width: globalCoolDown * 10 + '%' }")
+        .col-6
+          .btn-list
+            button(type="button" class="btn btn-block btn-azure btn-primary" "v-on:click"="ttsSentence" "v-bind:disabled"="globalCoolDown >= 10")
+              i.fe.fe-mic.mr-2
+              | Send a TTS Sentence
+            button(type="button" class="btn btn-block btn-green btn-primary" "v-on:click"="textSentence" "v-bind:disabled"="globalCoolDown >= 10")
+              i.fe.fe-book-open.mr-2
+              | Send a Text Sentence

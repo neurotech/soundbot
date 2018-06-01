@@ -1,0 +1,18 @@
+.header.mb-5
+  .container
+    .d-flex
+      .header-brand Soundbot
+      .d-flex.order-lg-2.ml-auto
+        .nav-item.d-none.d-md-flex.pr-0
+          .leading-none.nav-link.pr-0
+            span.ml-2.d-none.d-lg-block.text-right.pr-2
+              span.text-default(v-if="user.username") {{ user.username }}
+              small.text-muted.d-block.mt-1(v-if="user.discriminator") &#35;{{ user.discriminator }}
+            #status-wrapper
+              span.avatar(":style"="avatarImage")
+              span#status-icon("v-bind:class"="{ 'status-connected' : state.socket === 'connected', 'status-connecting' : state.socket === 'connecting', 'status-disconnected' : state.socket === 'disconnected' }" v-if="user.username")
+
+            a(href="/auth/discord" v-if="!token")
+              button.btn.btn-sm.btn-secondary.ml-3(type="button") Login
+            a(href="#" v-if="token")
+              button.btn.btn-sm.btn-secondary.ml-3(type="button" "v-on:click"="logoutUser()") Logout

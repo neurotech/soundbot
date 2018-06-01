@@ -1,0 +1,37 @@
+doctype
+html(lang='en-AU')
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    include includes/_unfurl.pug
+    title Soundbot
+    link(rel="shortcut icon" type="image/x-icon" href="favicon.png")
+    link(rel="icon" type="image/x-icon" href="favicon.png")
+    link(rel='stylesheet', href='normalise.css')
+    link(rel='stylesheet', href='index.css')
+    link(rel='stylesheet', href='dashboard.css')
+    script(src='vue.min.js')
+    script(src='socket.io.slim.js')
+    script(src='countUp.min.js')
+
+  body
+    #app("v-cloak")
+      .page
+        #dashboard.page-main
+          include includes/_header.pug
+
+          #container.container
+            include includes/_error.pug
+
+            .row
+              .col-7
+                include includes/_text-commands.pug
+                include includes/_voice-commands.pug
+
+              .col-5
+                include includes/_queue.pug
+
+            include includes/_sounds.pug
+
+  script(src='index.js')

@@ -1,0 +1,38 @@
+#voice
+  .card
+    .card-header
+      h3.card-title Voice
+      .card-options
+        label.custom-switch.m-0
+          span.mr-3.tag.tag-rounded("v-bind:class"="{ 'tag-blue' : state.isRandomSoundSelected, 'badge-light' : !state.isRandomSoundSelected }") Random Sound
+          input(type="checkbox" class="custom-switch-input" v-model="state.isRandomSoundSelected")
+          span(class="custom-switch-indicator")
+    .card-body
+      .row
+        .col-6
+          select(v-model="state.selectedVoiceChannel").custom-select
+            option(v-for="channel in channels.voice" "v-bind:value"="channel.id") &#x1F4E2; {{ channel.name }}
+        .col-6
+          button(type="button" class="btn btn-indigo btn-primary btn-block" v-if="state.isRandomSoundSelected" "v-on:click"="playRandomSound" "v-bind:disabled"="globalCoolDown >= 10")
+            i.fe.fe-music.mr-2
+            | Play a Random Sound
+
+          button.btn.btn-primary.btn-block(
+            type="button"
+            v-if="!state.isRandomSoundSelected"
+            "v-on:click"="playSound"
+            "v-bind:class"="{ 'btn-secondary' : !state.selectedSound.id, 'btn-pink' : state.selectedSound.id }"
+            "v-bind:disabled"="!state.selectedSound.id || checkTimeLeft(state.selectedSound.timeLeft)"
+          )
+            span(v-if="!state.selectedSound.id")
+              i.fe.fe-chevrons-down.mr-2
+              | Select a sound from the library
+            span(v-else)
+              i.fe.fe-music.mr-2
+              | Play Sound
+      .row
+        #sound-info.col.mt-4(v-if="!state.isRandomSoundSelected")
+          #nosound(v-if="!state.selectedSound.id") No sound selected!
+          #soundselected(v-if="state.selectedSound.id")
+            strong Selected Sound:
+            div "{{ state.selectedSound.description }}"

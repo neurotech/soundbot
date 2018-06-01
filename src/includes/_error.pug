@@ -1,0 +1,5 @@
+transition(name="fade")
+  .alert.alert-danger.alert-dismissible(role="alert" v-if="state.errorMessage.status")
+    button.close(type="button" class="close" data-dismiss="alert" "v-on:click"="clearErrorMessage")
+    strong {{ state.errorMessage.status }}
+    p {{ state.errorMessage.result }}

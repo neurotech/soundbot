@@ -1,0 +1,125 @@
+[v-cloak] {
+  display: none !important;
+}
+.btn-primary.disabled,
+.btn-primary:disabled {
+  cursor: not-allowed;
+}
+#login {
+  font-size: 1.2rem;
+}
+#discord-button {
+  color: #fff;
+  background-color: #7289da;
+  border-color: #7289da;
+  &:hover {
+    color: #fff;
+    background-color: #6175be;
+    border-color: #5568aa;
+    text-decoration: none;
+  }
+}
+.avatar {
+  background-color: white !important;
+}
+#status-wrapper {
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+}
+#status-icon {
+  position: absolute;
+  background-color: #cfcfcf;
+  background-clip: border-box;
+  border: 2px solid white;
+  border-radius: 999px;
+  width: 14px;
+  height: 14px;
+  bottom: -4px;
+  right: -2px;
+}
+#status-icon.status-connected {
+  background-color: #5eba00;
+}
+#status-icon.status-connecting {
+  background-color: #ffcc00;
+}
+#status-icon.status-disconnected {
+  background-color: #cd2020;
+}
+#queue-body {
+  min-height: 300px;
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+#queue-body #queue-header {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid #dee2e6;
+}
+#queue-body #queue-row {
+  border-bottom: 1px solid #dee2e6;
+}
+
+#queue-body #queue-row:nth-of-type(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+#nosound {
+  border: 2px dashed #f1e2a3;
+  background-color: #fcf3cf;
+  background-clip: padding-box;
+  color: #b89a21;
+  border-radius: 5px;
+  text-align: center;
+  padding: 0.8rem;
+  font-weight: bold;
+}
+#soundselected {
+  border: 2px solid #d2ecb8;
+  background-color: #dff1cc;
+  background-clip: padding-box;
+  color: #316100;
+  border-radius: 5px;
+  text-align: center;
+  padding: 0.8rem;
+}
+.sound-enabled {
+  transition: filter 0.5s;
+  filter: saturate(100%) opacity(100%);
+}
+.sound-disabled {
+  transition: filter 0.5s;
+  filter: saturate(0%) opacity(50%);
+  cursor: not-allowed;
+}
+.sound-disabled button {
+  cursor: not-allowed;
+}
+#gcd {
+  transition: all 0.75s;
+}
+.list-complete-item {
+  transition: all 0.45s;
+}
+.list-complete-move {
+  transition: all 0.45s;
+}
+.list-complete-enter,
+.list-complete-leave-to {
+  opacity: 0;
+  transform: translateX(50px);
+}
+.list-complete-leave-active {
+  transition: all 0.45s;
+}
+.list-complete-leave {
+  transition: all 0.45s;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.33s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
