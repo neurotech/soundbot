@@ -1,4 +1,5 @@
 let config = {
+  access: process.env.SOUNDBOT_USERS_WHITELIST,
   discord: {
     token: process.env.SOUNDBOT_TOKEN,
     guildId: process.env.SOUNDBOT_GUILD_ID,
@@ -11,15 +12,9 @@ let config = {
       voice: process.env.SOUNDBOT_VOICE_BLACKLIST.split(",")
     }
   },
-  aws: {
-    accessKeyId: process.env.SOUNDBOT_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.SOUNDBOT_AWS_ACCESS_KEY_SECRET
-  },
   rollbar: {
     serverToken: process.env.SOUNDBOT_ROLLBAR_SERVER_TOKEN
   },
-  validTokens: process.env.SOUNDBOT_VALID_TOKENS,
-  admins: process.env.SOUNDBOT_ADMINS,
   soundlist: process.env.SOUNDBOT_SOUNDLISTURL,
   paths: {
     sounds: "sounds"

@@ -1,6 +1,3 @@
-const fs = require("fs");
-const tiny = require("tiny-json-http");
-const config = require("../config");
 const db = require("../db");
 const validate = require("./auth/validate");
 const util = require("./util");
