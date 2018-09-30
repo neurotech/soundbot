@@ -49,6 +49,7 @@ setup((err, results) => {
     client.on("message", message => {
       // Ignore DMs and only respond to messages from text channels.
       if (message.channel.type !== "text") return;
+      if (message.author.id === client.user.id) return;
 
       // Send the message to router
       router(message);
