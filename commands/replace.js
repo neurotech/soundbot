@@ -12,8 +12,13 @@ let replacer = (message, words) => {
 };
 
 module.exports = message => {
+  var letterCount = message.content.length;
+  var words = message.content.split(" ");
+  var wordCount = words.length;
+  var dotStart = message.content.toLowerCase().startsWith(".");
+
   var dice = getRandomInt(20);
-  var roll = dice <= 1;
+  var roll = dice <= 1 && !dotStart && letterCount > 3 && wordCount >= 2;
 
   if (roll) {
     let replacementDone = false;
