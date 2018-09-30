@@ -57,6 +57,10 @@ module.exports = message => {
       replacementDone = true;
     }
 
-    return message.channel.send(messageText);
+    if (
+      replacementDone &&
+      nouns.length + verbs.length + adverbs.length + adjectives.length > 0
+    )
+      return message.channel.send(messageText);
   }
 };
