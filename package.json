@@ -30,7 +30,6 @@
     "queue": "^4.4.2",
     "righto": "^5.0.0",
     "rita": "^1.3.85",
-    "rollbar": "^2.3.9",
     "sea-lion": "2.0.2",
     "sentence-generator": "1.0.1",
     "socket.io": "^2.1.1",

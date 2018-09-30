@@ -2,7 +2,6 @@ const client = require("../discord/discord-client");
 const config = require("../config");
 const db = require("../db");
 const library = require("../library");
-const rollbar = require("../rollbar-client");
 
 let sounds = {
   play: (channelId, soundObject, queueId, callback) => {
@@ -18,7 +17,7 @@ let sounds = {
           connection.player.streamingData.pausedTime = 0;
         });
         stream.on("debug", debug => {
-          rollbar.debug(debug);
+          log("warning", debug);
         });
         stream.on("error", error => {
           return callback(error);
@@ -31,7 +30,7 @@ let sounds = {
           }, 2000);
         });
       })
-      .catch(rollbar.error);
+      .catch(console.error());
   },
   random: (id, queueId, callback) => {
     let voiceChannel = client.channels.get(id);
@@ -51,7 +50,7 @@ let sounds = {
           connection.player.streamingData.pausedTime = 0;
         });
         stream.on("debug", debug => {
-          rollbar.debug(debug);
+          log("warning", debug);
         });
         stream.on("error", error => {
           return callback(error);
@@ -64,7 +63,7 @@ let sounds = {
           }, 2000);
         });
       })
-      .catch(rollbar.error);
+      .catch(console.error());
   }
 };
 
