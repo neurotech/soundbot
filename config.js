@@ -46,7 +46,8 @@ let config = {
     purple: 0xbe87ec,
     pink: 0xee7ecd,
     teal: 0x63e7c8
-  }
+  },
+  word: process.env.SOUNDBOT_WORD
 };
 
 module.exports = config;

@@ -10,7 +10,8 @@
     "SOUNDBOT_TEXT_BLACKLIST": "@soundbot-text-blacklist",
     "SOUNDBOT_TOKEN": "@soundbot-token",
     "SOUNDBOT_USERS_WHITELIST": "@soundbot-users-whitelist",
-    "SOUNDBOT_VOICE_BLACKLIST": "@soundbot-voice-blacklist"
+    "SOUNDBOT_VOICE_BLACKLIST": "@soundbot-voice-blacklist",
+    "SOUNDBOT_WORD": "@soundbot-word"
   },
   "scale": {
     "sfo1": {
