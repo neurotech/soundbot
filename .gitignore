@@ -8,3 +8,4 @@ sounds/*.ogg
 sounds.json
 sentences.txt
 build
+.env
