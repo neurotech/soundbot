@@ -1,5 +1,6 @@
 const channel = require("./channel");
 const text = require("./text");
+const replace = require("./replace");
 
 const router = message => {
   // Join/leave the user's voice channel
@@ -10,6 +11,9 @@ const router = message => {
   // ｖａｐｏｒｗａｖｅ ｔｅｘｔ
   if (message.content.toLowerCase().startsWith(".vaporwave"))
     text.vaporwave(message);
+
+  // Word replacer
+  replace(message);
 };
 
 module.exports = router;
