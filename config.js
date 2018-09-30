@@ -15,7 +15,6 @@ let config = {
   rollbar: {
     serverToken: process.env.SOUNDBOT_ROLLBAR_SERVER_TOKEN
   },
-  soundlist: process.env.SOUNDBOT_SOUNDLISTURL,
   paths: {
     sounds: "sounds"
   },
