@@ -18,7 +18,7 @@ module.exports = (authorization, callback) => {
           if (err) return callback(err);
           let whitelist = config.access.split("|");
           let username = result.body.username;
-          let verified = whitelist.indexOf(username) > -1;
+          let verified = whitelist.indexOf(username.toLowerCase()) > -1;
           if (verified) {
             callback(null, true);
           } else {
