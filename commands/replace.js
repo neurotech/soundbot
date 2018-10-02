@@ -6,14 +6,32 @@ let getRandomInt = max => {
   return Math.floor(Math.random() * Math.floor(max));
 };
 
-let replacer = (message, words) => {
-  let index = getRandomInt(words.length);
-  var replacement = isPlural(words[index])
-    ? pluralize(config.word)
-    : config.word;
-  var replaced = message.replace(words[index], replacement);
+let checkLastThreeCharacters = (word, comparison) => {
+  if (word.length >= 3) return word.substr(word.length - 3) === comparison;
+};
 
-  // TODO: Check for current/past tense
+let replacer = (message, words) => {
+  var replaced;
+  let index = getRandomInt(words.length);
+  let word = words[index];
+  var newWord = config.word;
+  let ing = "ing";
+  var isVerb = rita.isVerb(word);
+  var isPlural = pluralize.isPlural(word);
+  var isPastTense = rita.getPastParticiple(word) === word;
+  var isPresentTense = rita.getPresentParticiple(word) === word;
+  var endsWithIng = checkLastThreeCharacters(word, ing);
+
+  if (isPlural) newWord = pluralize(config.word);
+
+  if (isVerb && isPastTense) newWord = rita.getPastParticiple(config.word);
+
+  if (isVerb && isPresentTense)
+    newWord = rita.getPresentParticiple(config.word);
+
+  if (isVerb && endsWithIng) newWord = config.word + ing;
+
+  replaced = message.replace(word, newWord);
 
   return replaced;
 };
