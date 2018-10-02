@@ -1,14 +1,20 @@
 const rita = require("rita");
+const pluralize = require("pluralize");
 const config = require("../config");
-const log = require("../log");
 
 let getRandomInt = max => {
   return Math.floor(Math.random() * Math.floor(max));
 };
 
 let replacer = (message, words) => {
-  var index = getRandomInt(words.length);
-  var replaced = message.replace(words[index], config.word);
+  let index = getRandomInt(words.length);
+  var replacement = isPlural(words[index])
+    ? pluralize(config.word)
+    : config.word;
+  var replaced = message.replace(words[index], replacement);
+
+  // TODO: Check for current/past tense
+
   return replaced;
 };
 
@@ -18,10 +24,10 @@ module.exports = message => {
   var wordCount = words.length;
   var dotStart = message.content.toLowerCase().startsWith(".");
 
-  var dice = getRandomInt(20);
-  var roll = dice <= 1 && !dotStart && letterCount > 3 && wordCount >= 2;
+  var diceRoll = getRandomInt(20);
+  var success = diceRoll <= 1 && !dotStart && letterCount > 3 && wordCount >= 2;
 
-  if (roll) {
+  if (success) {
     let replacementDone = false;
     let nouns = [];
     let verbs = [];
