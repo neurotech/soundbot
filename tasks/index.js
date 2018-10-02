@@ -33,7 +33,12 @@ const tasks = {
         let diff = now.getTime() - lastPlayed.getTime();
         let diffInMinutes = Math.round(diff / 60000);
         if (diffInMinutes > 5) {
-          currentVoiceChannel.leave();
+          currentVoiceChannel.connection.playFile("./spoken-words/afk.ogg", {
+            volume: 0.85
+          });
+          setTimeout(() => {
+            currentVoiceChannel.leave();
+          }, 2500);
         }
       }
     }, threeMinutes);
