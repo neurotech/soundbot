@@ -1,4 +1,5 @@
 const rita = require("rita");
+const config = require("../config");
 const log = require("../log");
 
 let getRandomInt = max => {
@@ -7,7 +8,7 @@ let getRandomInt = max => {
 
 let replacer = (message, words) => {
   var index = getRandomInt(words.length);
-  var replaced = message.replace(words[index], "piss");
+  var replaced = message.replace(words[index], config.word);
   return replaced;
 };
 
