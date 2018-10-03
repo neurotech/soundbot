@@ -146,7 +146,7 @@ let commands = {
                   let queueId = crypto.randomBytes(16).toString("hex");
                   queue.add(
                     function(cb) {
-                      sounds.play(channelId, null, queueId, (err, result) => {
+                      sounds.playRandom(channelId, queueId, (err, result) => {
                         if (err)
                           return util.sendResponse(400, "ERROR", err, response);
                         util.sendResponse(200, "OK", result, response);
