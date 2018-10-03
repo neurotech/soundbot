@@ -10,14 +10,12 @@ const router = require("./commands/router");
 db.defaults(config.db.defaults).write();
 setup((err, results) => {
   if (err) {
-    log("error", err);
+    log.error(err);
   } else {
-    log(
-      "info",
+    log.info(
       `DND Mode is ${db.get("state.dnd").value() === 0 ? "off" : "on"}.`
     );
-    log(
-      "success",
+    log.success(
       `DB seeded with ${results.text.length} text and ${
         results.voice.length
       } voice channels.`
@@ -29,9 +27,9 @@ setup((err, results) => {
     // Schedule recurring tasks
     tasks.schedule((err, tasks) => {
       if (err) {
-        log("error", err);
+        log.error(err);
       } else {
-        log("success", `Scheduled ${tasks} tasks.`);
+        log.success(`Scheduled ${tasks} tasks.`);
       }
     });
 
@@ -41,8 +39,8 @@ setup((err, results) => {
         .setActivity("https://soundbot.now.sh", {
           type: "WATCHING"
         })
-        .then(presence => log("success", "Soundbot online."))
-        .catch(err => log("error", error.message));
+        .then(presence => log.success("Soundbot online."))
+        .catch(err => log.error(err.message));
     });
 
     // Watch for messages
@@ -55,12 +53,17 @@ setup((err, results) => {
       router(message);
     });
 
+    // Catch unhandled errors
+    client.on("error", error => {
+      log.error(error.message);
+    });
+
     // Try to re-login if client goes offline
     setInterval(() => {
       if (client.status === 1) {
-        log("warning", "Soundbot lost connection to Discord!");
+        log.warning("Soundbot lost connection to Discord!");
         client.login(config.discord.token).then(() => {
-          log("success", "Soundbot re-connected to Discord.");
+          log.success("Soundbot re-connected to Discord.");
         });
       }
     }, 1000 * 30);
@@ -70,17 +73,17 @@ setup((err, results) => {
 // Log out on process exit/uncaught exception/unhandled rejection
 process.on("exit", () => {
   client.destroy();
-  log("error", "Shutting down Soundbot.");
+  log.error("Shutting down Soundbot.");
 });
 process.on("uncaughtException", err => {
   client.destroy();
-  log("error", `Uncaught exception!`);
-  if (err.code) log("error", err.code);
-  if (err.message) log("error", err.message);
-  log("error", err.stack);
+  log.error(`Uncaught exception!`);
+  if (err.code) log.error(err.code);
+  if (err.message) log.error(err.message);
+  log.error(err.stack);
   process.exit(1);
 });
 process.on("unhandledRejection", (reason, p) => {
   client.destroy();
-  log("error", `Unhandled Rejection: ${reason.stack}`);
+  log.error(`Unhandled Rejection: ${reason.stack}`);
 });

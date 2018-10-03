@@ -8,7 +8,7 @@ let api = {
       channels: function(request, response, tokens) {
         if (request.headers.authorization) {
           validate(request.headers.authorization, (err, data) => {
-            if (err) log("error", err);
+            if (err) log.error(err);
             let valid = data;
             if (valid) {
               var channels = db.get("discord.channels");

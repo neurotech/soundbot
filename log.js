@@ -3,39 +3,30 @@ const spacetime = require("spacetime");
 
 let timestampFormat = "dd-MM-yyyy hh:mm a";
 
-module.exports = (symbol, message) => {
-  var s = spacetime.now();
-  var symbolChar = null;
-
-  switch (symbol) {
-    case "info":
-      symbolChar = symbols.info;
-      break;
-
-    case "success":
-      symbolChar = symbols.success;
-      break;
-
-    case "warning":
-      symbolChar = symbols.warning;
-      break;
-
-    case "error":
-      symbolChar = symbols.error;
-      break;
-
-    default:
-      symbolChar = symbols.info;
-      break;
-  }
-
+let log = (message, symbol) => {
+  let s = spacetime.now();
   let logMessage = `[${s
     .goto("Australia/Sydney")
-    .format(timestampFormat)}] ${symbolChar} ${message}`;
+    .format(timestampFormat)}] ${symbol} ${message}`;
 
-  if (symbol === "error") {
+  if (symbol === symbols.error) {
     console.error(logMessage);
   } else {
     console.log(logMessage);
+  }
+};
+
+module.exports = {
+  info: message => {
+    log(message, symbols.info);
+  },
+  success: message => {
+    log(message, symbols.success);
+  },
+  warning: message => {
+    log(message, symbols.warning);
+  },
+  error: message => {
+    log(message, symbols.error);
   }
 };

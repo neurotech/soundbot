@@ -101,6 +101,6 @@ module.exports = {
   start: () => {
     authom.listen(server);
     server.listen(port);
-    log("info", `Started web server on port ${port}.`);
+    log.info(`Started web server on port ${port}.`);
   }
 };

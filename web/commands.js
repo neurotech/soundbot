@@ -10,7 +10,7 @@ const queue = require("../action-queue");
 let commands = {
   dnd: (request, response, tokens) => {
     validate(request.headers.authorization, (err, data) => {
-      if (err) log("error", err);
+      if (err) log.error(err);
       let valid = data;
       if (valid) {
         if (tokens.onOff) {
@@ -19,7 +19,7 @@ let commands = {
           if (tokens.onOff === "off") state = 0;
           db.set("state.dnd", state).write();
           let result = `DND Mode is now ${tokens.onOff.toUpperCase()}.`;
-          log("info", result);
+          log.info(result);
           util.sendResponse(200, "OK", result, response);
         } else if (tokens.onOff === "") {
           let dnd = db.get("state.dnd").value();
@@ -39,7 +39,7 @@ let commands = {
   sound: {
     play: function(request, response, tokens) {
       validate(request.headers.authorization, (err, data) => {
-        if (err) log("error", err);
+        if (err) log.error(err);
         let valid = data;
         if (valid) {
           let dnd = db.get("state.dnd").value();
@@ -112,7 +112,7 @@ let commands = {
     },
     random: function(request, response, tokens) {
       validate(request.headers.authorization, (err, data) => {
-        if (err) log("error", err);
+        if (err) log.error(err);
         let valid = data;
         if (valid) {
           let dnd = db.get("state.dnd").value();
@@ -180,7 +180,7 @@ let commands = {
   text: {
     sentence: function(request, response, tokens) {
       validate(request.headers.authorization, (err, data) => {
-        if (err) log("error", err);
+        if (err) log.error(err);
         let valid = data;
         if (valid) {
           var dnd = db.get("state.dnd").value();
@@ -253,7 +253,7 @@ let commands = {
     },
     ttsSentence: function(request, response, tokens) {
       validate(request.headers.authorization, (err, data) => {
-        if (err) log("error", err);
+        if (err) log.error(err);
         let valid = data;
         if (valid) {
           var dnd = db.get("state.dnd").value();

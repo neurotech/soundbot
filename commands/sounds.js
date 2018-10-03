@@ -17,7 +17,7 @@ let sounds = {
           connection.player.streamingData.pausedTime = 0;
         });
         stream.on("debug", debug => {
-          log("warning", debug);
+          log.warning(debug);
         });
         stream.on("error", error => {
           return callback(error);
@@ -50,7 +50,7 @@ let sounds = {
           connection.player.streamingData.pausedTime = 0;
         });
         stream.on("debug", debug => {
-          log("warning", debug);
+          log.warning(debug);
         });
         stream.on("error", error => {
           return callback(error);
