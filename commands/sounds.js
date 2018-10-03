@@ -34,8 +34,8 @@ function play(channelId, soundObject, queueId, callback) {
 }
 
 function playRandom(channelId, queueId, callback){
-  let selection = library[Math.floor(Math.random() * library.length)];
-  play(channelId, file, queueId, callback);
+  let randomSoundObject = library[Math.floor(Math.random() * library.length)];
+  play(channelId, randomSoundObject, queueId, callback);
 }
 
 module.exports = { play, playRandom };
