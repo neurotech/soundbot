@@ -22,18 +22,10 @@ function playFile(connection, path, callback) {
 }
 
 function play(channelId, soundObject, queueId, callback) {
+  var file = soundObject.file;
   db.set("lastSoundPlayedAt", new Date()).write();
-  var file;
   var voiceChannel = client.channels.get(channelId);
   var connection = righto.from(voiceChannel.join());
-
-  if (!soundObject) {
-    let selection = library[Math.floor(Math.random() * library.length)];
-    file = selection.file;
-  } else {
-    file = soundObject.file;
-  }
-
   var played = righto(playFile, connection, `./${config.paths.sounds}/${file}`)
     .get(() => righto(delay, 2000))
     .get(() => ({ queueId }));
@@ -41,4 +33,9 @@ function play(channelId, soundObject, queueId, callback) {
   played(callback);
 }
 
-module.exports = { play };
+function playRandom(channelId, queueId, callback){
+  let selection = library[Math.floor(Math.random() * library.length)];
+  play(channelId, file, queueId, callback);
+}
+
+module.exports = { play, playRandom };
