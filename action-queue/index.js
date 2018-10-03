@@ -8,7 +8,7 @@ let q = queue({
   autostart: true
 });
 
-q.on("success", function(result, job) {
+q.on("success", function(result) {
   io.emit("queue:remove-item", { queueId: result.queueId });
   db.get("queue.items")
     .remove({ queueId: result.queueId })

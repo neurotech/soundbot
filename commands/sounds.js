@@ -1,70 +1,44 @@
+const righto = require("righto");
 const client = require("../discord/discord-client");
 const config = require("../config");
 const db = require("../db");
 const library = require("../library");
+const log = require("../log");
 
-let sounds = {
-  play: (channelId, soundObject, queueId, callback) => {
-    let voiceChannel = client.channels.get(channelId);
-    let file = soundObject.file;
+function delay(time, callback) {
+  setTimeout(callback, time);
+}
 
-    db.set("lastSoundPlayedAt", new Date()).write();
-    voiceChannel
-      .join()
-      .then(connection => {
-        var stream = connection.playFile(`./${config.paths.sounds}/${file}`);
-        stream.on("start", () => {
-          connection.player.streamingData.pausedTime = 0;
-        });
-        stream.on("debug", debug => {
-          log.warning(debug);
-        });
-        stream.on("error", error => {
-          return callback(error);
-        });
-        stream.on("end", end => {
-          setTimeout(() => {
-            return callback(null, {
-              queueId: queueId
-            });
-          }, 2000);
-        });
-      })
-      .catch(console.error());
-  },
-  random: (id, queueId, callback) => {
-    let voiceChannel = client.channels.get(id);
-    let selection = library.sort(() => Math.random() * 2 - 1);
-    let random = selection.slice(0, 1);
-    let file = `./${config.paths.sounds}/${random[0].file}`;
-    let lastSoundPlayed = random[0];
+function playFile(connection, path, callback) {
+  var stream = connection.playFile(path);
+  var played = righto(function(done) {
+    stream.on("start", () => (connection.player.streamingData.pausedTime = 0));
+    stream.on("debug", log.warning);
+    stream.on("error", done);
+    stream.on("end", () => done());
+  });
 
-    db.set("lastSoundPlayedAt", new Date()).write();
+  played(callback);
+}
 
-    voiceChannel
-      .join()
-      .then(connection => {
-        var stream = connection.playFile(file);
+function play(channelId, soundObject, queueId, callback) {
+  db.set("lastSoundPlayedAt", new Date()).write();
+  var file;
+  var voiceChannel = client.channels.get(channelId);
+  var connection = righto.from(voiceChannel.join());
 
-        stream.on("start", () => {
-          connection.player.streamingData.pausedTime = 0;
-        });
-        stream.on("debug", debug => {
-          log.warning(debug);
-        });
-        stream.on("error", error => {
-          return callback(error);
-        });
-        stream.on("end", end => {
-          setTimeout(() => {
-            return callback(null, {
-              queueId: queueId
-            });
-          }, 2000);
-        });
-      })
-      .catch(console.error());
+  if (!soundObject) {
+    let selection = library[Math.floor(Math.random() * library.length)];
+    file = selection.file;
+  } else {
+    file = soundObject.file;
   }
-};
 
-module.exports = sounds;
+  var played = righto(playFile, connection, `./${config.paths.sounds}/${file}`)
+    .get(() => righto(delay, 2000))
+    .get(() => ({ queueId }));
+
+  played(callback);
+}
+
+module.exports = { play };

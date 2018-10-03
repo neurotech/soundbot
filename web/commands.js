@@ -74,7 +74,12 @@ let commands = {
                         queueId,
                         (err, result) => {
                           if (err)
-                            util.sendResponse(400, "ERROR", err, response);
+                            return util.sendResponse(
+                              400,
+                              "ERROR",
+                              err,
+                              response
+                            );
                           util.sendResponse(200, "OK", result, response);
                           cb(null, result);
                         }
@@ -141,8 +146,9 @@ let commands = {
                   let queueId = crypto.randomBytes(16).toString("hex");
                   queue.add(
                     function(cb) {
-                      sounds.random(channelId, queueId, (err, result) => {
-                        if (err) util.sendResponse(400, "ERROR", err, response);
+                      sounds.play(channelId, null, queueId, (err, result) => {
+                        if (err)
+                          return util.sendResponse(400, "ERROR", err, response);
                         util.sendResponse(200, "OK", result, response);
                         cb(null, result);
                       });
