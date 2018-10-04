@@ -19,6 +19,9 @@
       "max": 1
     }
   },
+  "github": {
+    "enabled": "false"
+  },
   "files": [
     "action-queue",
     "build",
