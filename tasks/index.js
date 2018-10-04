@@ -15,8 +15,7 @@ const tasks = {
       discord.getChannels((err, channels) => {
         if (err) return callback(err);
         db.set("discord.channels", channels).write();
-        log(
-          "success",
+        log.success(
           `DB updated with ${channels.text.length} text and ${
             channels.voice.length
           } voice channels.`

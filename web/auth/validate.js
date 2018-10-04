@@ -22,8 +22,7 @@ module.exports = (authorization, callback) => {
           if (verified) {
             callback(null, true);
           } else {
-            log(
-              "warning",
+            log.warning(
               `New authentication attempt! User: ${username} Token: ${token}`
             );
             callback(null, false);
