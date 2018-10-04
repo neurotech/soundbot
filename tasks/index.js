@@ -7,7 +7,6 @@ let hourly = new schedule.RecurrenceRule();
 hourly.minute = 0;
 
 let minute = 1000 * 60;
-let threeMinutes = minute * 5;
 
 const tasks = {
   schedule: callback => {
@@ -31,16 +30,14 @@ const tasks = {
         // https://stackoverflow.com/a/15437397
         let diff = now.getTime() - lastPlayed.getTime();
         let diffInMinutes = Math.round(diff / 60000);
-        if (diffInMinutes > 5) {
-          currentVoiceChannel.connection.playFile("./spoken-words/afk.ogg", {
-            volume: 0.85
-          });
+        if (diffInMinutes >= 5) {
+          currentVoiceChannel.connection.playFile("./spoken-words/afk.ogg");
           setTimeout(() => {
             currentVoiceChannel.leave();
           }, 2500);
         }
       }
-    }, threeMinutes);
+    }, minute);
 
     callback(null, 2);
   }
