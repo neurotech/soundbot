@@ -20,7 +20,7 @@
     }
   },
   "github": {
-    "enabled": "false"
+    "enabled": false
   },
   "files": [
     "action-queue",
