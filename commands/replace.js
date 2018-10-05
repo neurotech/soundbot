@@ -2,8 +2,8 @@ const rita = require("rita");
 const pluralize = require("pluralize");
 const config = require("../config");
 
-let getRandomInt = max => {
-  return Math.floor(Math.random() * Math.floor(max));
+let getRandomInt = (min, max) => {
+  return min + Math.floor(Math.random() * (max - min + 1));
 };
 
 let checkLastThreeCharacters = (word, comparison) => {
@@ -12,7 +12,7 @@ let checkLastThreeCharacters = (word, comparison) => {
 
 let replacer = (message, words) => {
   var replaced;
-  let index = getRandomInt(words.length);
+  let index = getRandomInt(0, words.length - 1);
   let word = words[index];
   var newWord = config.word;
   let ing = "ing";
@@ -31,6 +31,9 @@ let replacer = (message, words) => {
 
   if (isVerb && endsWithIng) newWord = config.word + ing;
 
+  if (word.charAt(0) === word.charAt(0).toUpperCase())
+    newWord = newWord.charAt(0).toUpperCase() + newWord.slice(1);
+
   replaced = message.replace(word, newWord);
 
   return replaced;
@@ -42,8 +45,8 @@ module.exports = message => {
   var wordCount = words.length;
   var dotStart = message.content.toLowerCase().startsWith(".");
 
-  var diceRoll = getRandomInt(20);
-  var success = diceRoll <= 1 && !dotStart && letterCount > 3 && wordCount >= 2;
+  var diceRoll = getRandomInt(1, 100);
+  var success = diceRoll <= 4 && !dotStart && letterCount > 3 && wordCount >= 2;
 
   if (success) {
     let replacementDone = false;
