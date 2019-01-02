@@ -9,7 +9,7 @@ let buildDir = "./build/login";
 let fontsDir = "./build/fonts/feather";
 
 // Prepare the ./build directory and subdirectories
-if (!fs.existsSync(buildDir)) fs.mkdirSync(buildDir);
+if (!fs.existsSync(buildDir)) mkdirp.sync(buildDir);
 if (!fs.existsSync(fontsDir)) mkdirp.sync(fontsDir);
 
 // Compile pug to HTML
